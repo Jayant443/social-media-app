@@ -8,8 +8,8 @@ class Post(SQLModel, table=True):
     __tablename__="posts"
     
     id: UUID = Field(sa_column=Column(BINARY(16), primary_key=True, default=uuid4))
-    author_id: UUID = Field(foreign_key="users.id")
-    community_id: UUID = Field(foreign_key="communities.id")
+    author_id: UUID = Field(sa_column=Column(BINARY(16), foreign_key="users.id"))
+    community_id: UUID = Field(sa_column=Column(BINARY(16), foreign_key="communities.id"))
     title: str = Field(max_length=200)
     body: Optional[str] = None
     url: Optional[str] = None
@@ -18,13 +18,13 @@ class Post(SQLModel, table=True):
     is_deleted: bool = Field(default=False)
     is_locked: bool = Field(default=False)
     is_pinned: bool = Field(default=False)
-    created_at: datetime = Field(default=datetime.utcnow)
-    updated_at: datetime = Field(default=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
 
 class SavedPost(SQLModel, table=True):
     __tablename__ = "saved_posts"
 
     id: UUID = Field(sa_column=Column(BINARY(16), primary_key=True, default=uuid4))
-    user_id: UUID = Field(foreign_key="users.id")
-    post_id: UUID = Field(foreign_key="posts.id")
+    user_id: UUID = Field(sa_column=Column(BINARY(16), foreign_key="users.id"))
+    post_id: UUID = Field(sa_column=Column(BINARY(16), foreign_key="posts.id"))
     saved_at: datetime = Field(default_factory=datetime.utcnow)

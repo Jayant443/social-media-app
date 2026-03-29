@@ -13,8 +13,8 @@ class Vote(SQLModel, table=True):
     __tablename__="votes"
 
     id: UUID = Field(sa_column=Column(BINARY(16), primary_key=True, default=uuid4))
-    user_id: UUID = Field(foreign_key="users.id")
-    target_id: UUID
+    user_id: UUID = Field(sa_column=Column(BINARY(16), foreign_key="users.id"))
+    target_id: UUID = Field(sa_column=Column(BINARY(16), nullable=False))
     target_type: TargetType
     value: int = Field(ge=-1, le=1)
-    created_at: datetime = Field(default=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.utcnow)

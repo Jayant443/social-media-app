@@ -3,6 +3,11 @@ from src.core.config import Config
 from sqlalchemy.orm import sessionmaker
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlalchemy.ext.asyncio import create_async_engine
+from src.models.comment import Comment
+from src.models.user import User
+from src.models.post import Post
+from src.models.vote import Vote
+from src.models.community import Community, CommunityMember
 
 engine = create_async_engine(
     url=Config.DB_URL,
