@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, Field, Column
 from sqlalchemy.dialects.mysql import BINARY
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from uuid import UUID, uuid4
 import enum
 
@@ -17,4 +17,4 @@ class Vote(SQLModel, table=True):
     target_id: UUID = Field(sa_column=Column(BINARY(16), nullable=False))
     target_type: TargetType
     value: int = Field(ge=-1, le=1)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))

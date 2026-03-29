@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, Field, Column
 from sqlalchemy.dialects.mysql import BINARY
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from uuid import UUID, uuid4
 
 class Comment(SQLModel, table=True):
@@ -14,5 +14,5 @@ class Comment(SQLModel, table=True):
     body: str
     vote_score: int = Field(default=0)
     is_deleted: bool = Field(default=False)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
-    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    created_at: datetime = Field(default_factory=datetime.now(timezone.utc))
+    updated_at: datetime = Field(default_factory=datetime.now(timezone.utc))
