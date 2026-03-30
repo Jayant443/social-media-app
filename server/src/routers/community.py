@@ -6,10 +6,9 @@ from src.schemas.post import PostSchema
 from src.services.auth import get_current_user
 from src.models.user import User
 from sqlmodel.ext.asyncio.session import AsyncSession
-from src.database import get_session
+from src.core.database import get_session
 from uuid import UUID
 from typing import Optional, List
-from sqlmodel import select
 
 router = APIRouter()
 community_service = CommunityService()
