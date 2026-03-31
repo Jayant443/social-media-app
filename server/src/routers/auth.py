@@ -6,10 +6,10 @@ from src.services.user import UserService
 from src.core.database import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 
-router = APIRouter()
+auth_router = APIRouter()
 user_service = UserService()
 
-@router.post("/register", response_model=UserSchema)
+@auth_router.post("/register", response_model=UserSchema)
 async def register(user: CreateUserSchema, session: AsyncSession = Depends(get_session)):
     existing_user = user_service.get_user_by_email(user.email, session)
     if existing_user:
@@ -23,7 +23,7 @@ async def register(user: CreateUserSchema, session: AsyncSession = Depends(get_s
     access_token = create_access_token(data={"sub": new_user.email})
     return {"access_token": access_token, "token_type": "bearer"}
 
-@router.post("/login", response_model=UserSchema)
+@auth_router.post("/login", response_model=UserSchema)
 async def login(user: CreateUserSchema, session: AsyncSession = Depends(get_session)):
     existing_user = user_service.get_user_by_email(user.email, session)
     if not existing_user:
