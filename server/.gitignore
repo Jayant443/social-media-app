@@ -1,5 +1,4 @@
 .env
 venv/
 __pycache__/
-docs.md
-erdiagram.html
+docs/

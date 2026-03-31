@@ -8,7 +8,6 @@ from sqlmodel import select
 from src.models.post import Post, SavedPost
 from src.models.comment import Comment
 from src.models.community import Community
-from src.services.auth import hash_password
 
 class UserService:
     async def get_user(self, username: str, session: AsyncSession) -> Optional[User]:
@@ -25,7 +24,6 @@ class UserService:
         if existing is not None:
             return None
         user_data_dict = user.model_dump()
-        user_data_dict["password"] = hash_password(user_data_dict["password"])
         db_user = User(**user_data_dict)
         session.add(db_user)
         await session.commit()
