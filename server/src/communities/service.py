@@ -1,10 +1,10 @@
-from src.models.community import Community, CommunityMember
-from src.schemas.community import CreateCommunitySchema, UpdateCommunitySchema, CommunitySchema, CommunityMemberSchema
-from src.models.post import Post
 from sqlmodel.ext.asyncio.session import AsyncSession
 from uuid import UUID
 from typing import Optional, List
 from sqlmodel import select
+from src.communities.model import Community, CommunityMember
+from src.communities.schema import CreateCommunitySchema, UpdateCommunitySchema, CommunitySchema, CommunityMemberSchema
+from src.posts.model import Post
 
 class CommunityService:
     async def create_community(self, community: CreateCommunitySchema, session: AsyncSession) -> Optional[Community]:

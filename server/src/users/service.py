@@ -1,13 +1,12 @@
-from server.src.models.community import CommunityMember
-from src.models.user import User
-from src.schemas.user import CreateUserSchema, UpdateUserSchema
+from src.users.schema import CreateUserSchema, UpdateUserSchema
 from sqlmodel.ext.asyncio.session import AsyncSession
 from uuid import UUID
 from typing import Optional, List
 from sqlmodel import select
-from src.models.post import Post, SavedPost
-from src.models.comment import Comment
-from src.models.community import Community
+from src.posts.model import Post, SavedPost
+from src.comments.model import Comment
+from src.communities.model import Community, CommunityMember
+from src.users.model import User
 
 class UserService:
     async def get_user(self, username: str, session: AsyncSession) -> Optional[User]:

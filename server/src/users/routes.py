@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel.ext.asyncio.session import AsyncSession
 from src.core.database import get_session
-from src.models.user import User
+from src.users.model import User
 from src.dependencies.auth import get_current_user
-from src.schemas.user import CreateUserSchema, UpdateUserSchema, UserSchema
-from src.services.user import UserService
+from src.users.schema import CreateUserSchema, UpdateUserSchema, UserSchema
+from src.users.service import UserService
 from uuid import UUID
 from typing import Optional, List
 

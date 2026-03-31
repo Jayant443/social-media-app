@@ -1,7 +1,7 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
 from sqlmodel import select
-from src.models.comment import Comment
-from src.schemas.comment import CommentCreate, CommentUpdate
+from src.comments.model import Comment
+from src.comments.schema import CommentCreate, CommentUpdate
 from uuid import UUID
 
 class CommentService:

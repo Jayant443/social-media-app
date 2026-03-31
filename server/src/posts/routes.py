@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel.ext.asyncio.session import AsyncSession
 from src.core.database import get_session
-from src.models.user import User
+from src.users.model import User
 from src.dependencies.auth import get_current_user
-from src.schemas.post import CreatePostSchema, UpdatePostSchema, PostSchema, SavedPostSchema, SavePostSchema
-from src.services.post import PostService
+from src.posts.schema import CreatePostSchema, UpdatePostSchema, PostSchema, SavedPostSchema, SavePostSchema
+from src.posts.service import PostService
 from uuid import UUID
 
 post_router = APIRouter()

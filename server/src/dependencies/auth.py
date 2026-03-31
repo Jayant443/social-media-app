@@ -4,7 +4,7 @@ from jose import JWTError, jwt
 from src.core.database import get_session
 from pydantic import BaseModel
 from sqlmodel.ext.asyncio.session import AsyncSession
-from src.services.user import UserService
+from src.users.service import UserService
 from src.core.config import Config
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="user/token")

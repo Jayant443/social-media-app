@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from src.models.user import User
-from src.schemas.user import CreateUserSchema, UserSchema
-from src.services.auth import create_access_token, verify_password, hash_password
-from src.services.user import UserService
+from src.users.model import User
+from src.users.schema import CreateUserSchema, UserSchema
+from src.auth.service import create_access_token, verify_password, hash_password
+from src.users.service import UserService
 from src.core.database import get_session
 from sqlmodel.ext.asyncio.session import AsyncSession
 

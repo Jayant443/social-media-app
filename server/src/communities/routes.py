@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
-from src.models.community import Community, CommunityMember
-from src.schemas.community import CreateCommunitySchema, UpdateCommunitySchema, CommunitySchema, CommunityMemberSchema
-from src.services.community import CommunityService
-from src.schemas.post import PostSchema
-from src.services.auth import get_current_user
-from src.models.user import User
+from src.communities.model import Community, CommunityMember
+from src.communities.schema import CreateCommunitySchema, UpdateCommunitySchema, CommunitySchema, CommunityMemberSchema
+from src.communities.service import CommunityService
+from src.posts.schema import PostSchema
+from src.dependencies.auth import get_current_user
+from src.users.model import User
 from sqlmodel.ext.asyncio.session import AsyncSession
 from src.core.database import get_session
 from uuid import UUID

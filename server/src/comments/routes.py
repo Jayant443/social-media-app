@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel.ext.asyncio.session import AsyncSession
-from src.services.comment import CommentService
+from src.comments.service import CommentService
 from src.dependencies.auth import get_current_user
 from src.core.database import get_session
-from src.models.user import User
-from src.schemas.comment import CommentCreate, CommentUpdate, CommentResponse
+from src.users.model import User
+from src.comments.schema import CommentCreate, CommentUpdate, CommentResponse
 from uuid import UUID
 
 comment_router = APIRouter()

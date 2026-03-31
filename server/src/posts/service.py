@@ -1,9 +1,9 @@
-from src.models.post import Post, SavedPost
-from src.schemas.post import CreatePostSchema, UpdatePostSchema, PostSchema, SavedPostSchema, SavePostSchema
 from sqlmodel.ext.asyncio.session import AsyncSession
 from uuid import UUID
 from typing import Optional, List
 from sqlmodel import select
+from src.posts.model import Post, SavedPost
+from src.posts.schema import CreatePostSchema, UpdatePostSchema, PostSchema, SavedPostSchema, SavePostSchema
 
 class PostService:
     async def create_post(self, post: CreatePostSchema, session: AsyncSession) -> Optional[Post]:
