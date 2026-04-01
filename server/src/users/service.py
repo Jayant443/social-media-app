@@ -17,6 +17,10 @@ class UserService:
         result = await session.exec(select(User).where(User.id == id))
         return result.first()
 
+    async def get_user_by_email(self, email: str, session: AsyncSession) -> Optional[User]:
+        result = await session.exec(select(User).where(User.email == email))
+        return result.first()
+
     async def create_user(self, user: CreateUserSchema, session: AsyncSession) -> Optional[User]:
         result = await session.exec(select(User).where(User.username == user.username))
         existing = result.first()

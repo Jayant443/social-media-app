@@ -10,7 +10,7 @@ from uuid import UUID
 post_router = APIRouter()
 post_service = PostService()
 
-@post_router.post("/", response_model=PostSchema)
+@post_router.post("/create", response_model=PostSchema)
 async def create_post(post: CreatePostSchema, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     return await post_service.create_post(post, session)
 

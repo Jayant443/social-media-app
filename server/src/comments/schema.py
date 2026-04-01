@@ -15,7 +15,7 @@ class CommentUpdate(BaseModel):
     body: Optional[str] = None
     is_deleted: Optional[bool] = False
 
-class CommentResponse(CommentBase):
+class CommentSchema(CommentBase):
     id: UUID
     author_id: UUID
     post_id: UUID
