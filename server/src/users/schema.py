@@ -11,14 +11,10 @@ class UserBase(BaseModel):
 
 class CreateUserSchema(UserBase):
     password: str
-    @field_validator("password", mode="before")
-    @classmethod
-    def validate_password(cls, v: str) -> str:
-        if len(v.encode("utf-8")) > 72:
-            raise ValueError("Password cannot be longer than 72 bytes")
-        if len(v) < 8:
-            raise ValueError("Password must be at least 8 characters")
-        return v
+
+class LoginUserSchema(BaseModel):
+    identifier: str
+    password: str
 
 class UpdateUserSchema(BaseModel):
     username: Optional[str] = None

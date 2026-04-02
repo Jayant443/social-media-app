@@ -2,7 +2,7 @@ from src.users.schema import CreateUserSchema, UpdateUserSchema
 from sqlmodel.ext.asyncio.session import AsyncSession
 from uuid import UUID
 from typing import Optional, List
-from sqlmodel import select
+from sqlmodel import select, or_
 from src.posts.model import Post, SavedPost
 from src.comments.model import Comment
 from src.communities.model import Community, CommunityMember
@@ -11,6 +11,10 @@ from src.users.model import User
 class UserService:
     async def get_user(self, username: str, session: AsyncSession) -> Optional[User]:
         result = await session.exec(select(User).where(User.username == username))
+        return result.first()
+
+    async def get_user_by_identifier(self, identifier: str, session: AsyncSession) -> Optional[User]:
+        result = await session.exec(select(User).where(or_(User.username == identifier, User.email == identifier)))
         return result.first()
 
     async def get_user_by_id(self, id: UUID, session: AsyncSession) -> Optional[User]:
@@ -49,7 +53,7 @@ class UserService:
         db_user = await session.get(User, id)
         if not db_user:
             return False
-        session.delete(db_user)
+        await session.delete(db_user)
         await session.commit()
         return True
 

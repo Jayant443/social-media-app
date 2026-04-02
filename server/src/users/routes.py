@@ -15,44 +15,11 @@ user_router = APIRouter()
 user_service = UserService()
 
 @user_router.get("/me", response_model=UserSchema)
-async def get_user(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
-    return await user_service.get_user_by_id(session)
-
-@user_router.get("/{id}", response_model=UserSchema)
-async def get_user(id: UUID, session: AsyncSession = Depends(get_session)):
-    return await user_service.get_user_by_id(id, session)
-
-@user_router.get("/{username}", response_model=UserSchema)
-async def get_user(username: str, session: AsyncSession = Depends(get_session)):
-    return await user_service.get_user(username, session)
-
-@user_router.patch("/{id}", response_model=UserSchema)
-async def update_user(id: UUID, user: UpdateUserSchema, current_user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
-    return await user_service.update_user(id, user, session)
-
-@user_router.delete("/{id}", response_model=UserSchema)
-async def delete_user(id: UUID, current_user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
-    return await user_service.delete_user(id, session)
-
-@user_router.get("/me/posts", response_model=List[PostSchema])
-async def get_user_posts(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
-    return await user_service.get_user_posts(current_user.id, session)
-
-@user_router.get("/{user_id}/posts", response_model=List[PostSchema])
-async def get_user_posts(user_id: UUID, session: AsyncSession = Depends(get_session)):
-    return await user_service.get_user_posts(user_id, session)
-
-@user_router.get("/me/comments", response_model=List[CommentSchema])
-async def get_user_comments(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
-    return await user_service.get_user_comments(current_user.id, session)
-
-@user_router.get("/{user_id}/comments", response_model=List[CommentSchema])
-async def get_user_comments(user_id: UUID, session: AsyncSession = Depends(get_session)):
-    return await user_service.get_user_comments(user_id, session)
-
-@user_router.get("/{user_id}/r", response_model=List[CommunitySchema])
-async def get_user_communities(user_id: UUID, session: AsyncSession = Depends(get_session)):
-    return await user_service.get_user_communities(user_id, session)
+async def get_me(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    user = await user_service.get_user_by_id(current_user.id, session)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
 
 @user_router.get("/me/saved", response_model=List[PostSchema])
 async def get_user_saved_posts(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
@@ -65,3 +32,52 @@ async def get_user_communities(session: AsyncSession = Depends(get_session), cur
 @user_router.get("/me/created-communities", response_model=List[CommunitySchema])
 async def get_user_created_communities(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     return await user_service.get_user_created_communities(current_user.id, session)
+
+@user_router.get("/me/posts", response_model=List[PostSchema])
+async def get_user_posts(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    return await user_service.get_user_posts(current_user.id, session)
+
+@user_router.get("/me/comments", response_model=List[CommentSchema])
+async def get_user_comments(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    return await user_service.get_user_comments(current_user.id, session)
+
+@user_router.patch("/update", response_model=UserSchema)
+async def update_user(user: UpdateUserSchema, current_user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    updated = await user_service.update_user(current_user.id, user, session)
+    if not updated:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return updated
+
+@user_router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_user(current_user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    result = await user_service.delete_user(current_user.id, session)
+    if not result:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+
+@user_router.get("/{username}", response_model=UserSchema)
+async def get_user_by_username(username: str, session: AsyncSession = Depends(get_session)):
+    user = await user_service.get_user(username, session)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user
+
+@user_router.get("/{user_id}/posts", response_model=List[PostSchema])
+async def get_posts_by_user_id(user_id: UUID, session: AsyncSession = Depends(get_session)):
+    user = await user_service.get_user_by_id(user_id, session)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return await user_service.get_user_posts(user_id, session)
+
+@user_router.get("/{user_id}/comments", response_model=List[CommentSchema])
+async def get_comments_by_user_id(user_id: UUID, session: AsyncSession = Depends(get_session)):
+    user = await user_service.get_user_by_id(user_id, session)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return await user_service.get_user_comments(user_id, session)
+
+@user_router.get("/{user_id}/r", response_model=List[CommunitySchema])
+async def get_communities_by_user_id(user_id: UUID, session: AsyncSession = Depends(get_session)):
+    user = await user_service.get_user_by_id(user_id, session)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return await user_service.get_user_communities(user_id, session)
