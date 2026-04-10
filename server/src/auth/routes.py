@@ -19,6 +19,12 @@ async def register(user: CreateUserSchema, session: AsyncSession = Depends(get_s
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Email already registered"
         )
+    existing_user = await user_service.get_user(user.username, session)
+    if existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="This username is already taken"
+        )
     hashed_password = auth_service.hash_password(user.password)
     user.password = hashed_password
     new_user = await user_service.create_user(user, session)
