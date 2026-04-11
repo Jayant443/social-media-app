@@ -58,7 +58,7 @@ class UserService:
         return True
 
     async def get_user_posts(self, id: UUID, session: AsyncSession) -> List[Post]:
-        result = await session.exec(select(Post).where(Post.author_id == id))
+        result = await session.exec(select(Post).where(Post.author_id == id, Post.is_deleted==False))
         return result.all()
 
     async def get_user_comments(self, id: UUID, session: AsyncSession) -> List[Comment]:
@@ -66,7 +66,7 @@ class UserService:
         return result.all()
 
     async def get_user_saved_posts(self, id: UUID, session: AsyncSession) -> List[Post]:
-        result = await session.exec(select(Post).where(SavedPost.user_id == id))
+        result = await session.exec(select(Post).join(SavedPost, SavedPost.post_id==Post.id).where(SavedPost.user_id == id, Post.is_deleted==False))
         return result.all()
 
     async def get_user_communities(self, id: UUID, session: AsyncSession) -> List[Community]:

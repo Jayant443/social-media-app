@@ -22,7 +22,7 @@ class PostService:
 
     async def edit_post(self, id: UUID, post: UpdatePostSchema, session: AsyncSession) -> Optional[Post]:
         db_post = await session.get(Post, id)
-        if not db_post:
+        if not db_post or db_post.is_deleted:
             return None
         post_data = post.dict(exclude_unset=True)
         for key, value in post_data.items():
@@ -42,12 +42,12 @@ class PostService:
         await session.refresh(db_post)
         return db_post
 
-    async def save_post(self, post: SavePostSchema, session: AsyncSession) -> Optional[Post]:
-        db_post = await session.get(SavedPost, post.id)
-        if not db_post:
+    async def save_post(self, user_id: UUID, post: SavePostSchema, session: AsyncSession) -> Optional[Post]:
+        existing_saved_post = await session.get(SavedPost, post.post_id)
+        if existing_saved_post:
             return None
         post_data_dict = post.model_dump()
-        post_data_dict["is_deleted"] = False
+        post_data_dict["user_id"] = user_id
         saved_post = SavedPost(**post_data_dict)
         session.add(saved_post)
         await session.commit()
@@ -58,6 +58,10 @@ class PostService:
         db_post = await session.get(SavedPost, id)
         if not db_post:
             return None
-        session.delete(db_post)
+        await session.delete(db_post)
         await session.commit()
         return True
+    
+    async def get_saved_posts(self, user_id: UUID, session: AsyncSession):
+        result = await session.exec(select(SavedPost).where(SavedPost.user_id == user_id))
+        return result.all()
