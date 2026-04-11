@@ -20,7 +20,6 @@ class UpdateUserSchema(BaseModel):
     username: Optional[str] = None
     avatar_url: Optional[str] = None
     bio: Optional[str] = None
-    password: Optional[str] = None
 
 class UserSchema(UserBase):
     id: UUID

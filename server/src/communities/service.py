@@ -8,9 +8,6 @@ from src.posts.model import Post
 
 class CommunityService:
     async def create_community(self, creator_id: UUID, community: CreateCommunitySchema, session: AsyncSession) -> Optional[Community]:
-        result = await session.exec(select(Community).where(Community.name == community.name))
-        if result.first():
-            return None
         community_data_dict = community.dict(exclude_unset=True)
         community_data_dict["created_by"] = creator_id
         new_community = Community(**community_data_dict)
@@ -25,6 +22,10 @@ class CommunityService:
 
     async def get_community(self, id: UUID, session: AsyncSession) -> Optional[Community]:
         result = await session.exec(select(Community).where(Community.id == id))
+        return result.first()
+    
+    async def get_community_by_name(self, name: str, session: AsyncSession) -> Optional[Community]:
+        result = await session.exec(select(Community).where(Community.name==name))
         return result.first()
 
     async def update_community(self, id: UUID, community: UpdateCommunitySchema, session: AsyncSession) -> Optional[Community]:

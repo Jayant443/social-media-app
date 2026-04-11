@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Form, File, UploadFile
 from sqlmodel.ext.asyncio.session import AsyncSession
 from src.core.database import get_session
 from src.users.model import User
@@ -10,6 +10,7 @@ from src.communities.schema import CommunitySchema
 from src.users.service import UserService
 from uuid import UUID
 from typing import Optional, List
+from src.utils.image_upload import upload_to_cloudinary
 
 user_router = APIRouter()
 user_service = UserService()
@@ -42,7 +43,19 @@ async def get_user_comments(session: AsyncSession = Depends(get_session), curren
     return await user_service.get_user_comments(current_user.id, session)
 
 @user_router.patch("/update", response_model=UserSchema)
-async def update_user(user: UpdateUserSchema, current_user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+async def update_user(username: str = Form(None), avatar: Optional[UploadFile] = File(None), bio: str = Form(None),current_user: User = Depends(get_current_user), session: AsyncSession = Depends(get_session)):
+    existing = user_service.get_user_by_id(current_user.id, session)
+    if not existing:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    update_data = {}
+    if username:
+        update_data["username"] = username
+    if avatar:
+        avatar_url = await upload_to_cloudinary(await avatar.read())
+        update_data["avatar-url"] = avatar_url
+    if bio:
+        update_data["bio"] = bio
+    user = UpdateUserSchema(**update_data)
     updated = await user_service.update_user(current_user.id, user, session)
     if not updated:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")

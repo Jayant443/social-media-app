@@ -14,13 +14,14 @@ class CreateCommunitySchema(CommunityBase):
 
 class UpdateCommunitySchema(BaseModel):
     description: Optional[str] = Field(default=None)
+    banner_url: Optional[str] = Field(default=None)
     icon_url: Optional[str] = Field(default=None)
 
 class CommunitySchema(CommunityBase):
     id: UUID
     created_by: UUID
-    is_private: bool
-    is_restricted: bool
+    is_private: bool = Field(False)
+    is_restricted: bool = Field(False)
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)
 
