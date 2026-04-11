@@ -30,6 +30,7 @@ class PostSchema(PostBase):
     model_config=ConfigDict(from_attributes=True)
 
 class SavePostSchema(BaseModel):
+    id: UUID
     user_id: UUID
     post_id: UUID
 

@@ -13,11 +13,15 @@ class CommunityService:
             return None
         community_data_dict = community.dict(exclude_unset=True)
         community_data_dict["created_by"] = creator_id
-        community_data = Community(**community_data_dict)
-        session.add(community_data)
+        new_community = Community(**community_data_dict)
+        session.add(new_community)
         await session.commit()
-        await session.refresh(community_data)
-        return community_data
+        await session.refresh(new_community)
+        community_member = CommunityMember(user_id=creator_id, community_id=new_community.id, role="admin")
+        session.add(community_member)
+        await session.commit()
+        await session.refresh(community_member)
+        return new_community
 
     async def get_community(self, id: UUID, session: AsyncSession) -> Optional[Community]:
         result = await session.exec(select(Community).where(Community.id == id))

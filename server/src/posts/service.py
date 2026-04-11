@@ -6,8 +6,11 @@ from src.posts.model import Post, SavedPost
 from src.posts.schema import CreatePostSchema, UpdatePostSchema, PostSchema, SavedPostSchema, SavePostSchema
 
 class PostService:
-    async def create_post(self, post: CreatePostSchema, session: AsyncSession) -> Optional[Post]:
-        post_data = Post(**post.dict())
+    async def create_post(self, author_id: UUID, community_id: UUID, post: CreatePostSchema, session: AsyncSession) -> Optional[Post]:
+        post_data_dict = post.dict(exclude_unset=True)
+        post_data_dict["author_id"] = author_id
+        post_data_dict["community_id"] = community_id
+        post_data = Post(**post_data_dict)
         session.add(post_data)
         await session.commit()
         await session.refresh(post_data)

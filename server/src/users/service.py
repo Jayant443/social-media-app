@@ -70,7 +70,7 @@ class UserService:
         return result.all()
 
     async def get_user_communities(self, id: UUID, session: AsyncSession) -> List[Community]:
-        result = await session.exec(select(CommunityMember).where(CommunityMember.user_id == id))
+        result = await session.exec(select(Community).join(CommunityMember, CommunityMember.community_id==Community.id).where(CommunityMember.user_id == id))
         return result.all()
 
     async def get_user_created_communities(self, id: UUID, session: AsyncSession) -> List[Community]:

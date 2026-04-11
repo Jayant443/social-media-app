@@ -54,7 +54,7 @@ async def leave_community(id: UUID, session: AsyncSession = Depends(get_session)
 async def get_community_members(id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     db_community_members = await community_service.get_community_members(id, session)
     if not db_community_members:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Member not found")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Members not found")
     return db_community_members
 
 @community_router.get("/{id}/posts", response_model=List[PostSchema])
