@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 from typing import Optional
 from datetime import datetime
 from uuid import UUID
@@ -22,3 +22,5 @@ class CommentSchema(CommentBase):
     is_deleted: bool = False
     created_at: datetime
     updated_at: datetime
+    
+    model_config = ConfigDict(from_attributes=True)

@@ -24,11 +24,11 @@ class CommentService:
     async def get_top_comments(self, post_id: UUID, session: AsyncSession) -> list[Comment]:
         result = await session.exec(select(Comment).where(Comment.post_id == post_id, Comment.parent_id==None))
         return result.all()
-    
+
     async def get_replies(self, parent_id: UUID, session: AsyncSession):
         result = await session.exec(select(Comment).where(Comment.parent_id==parent_id))
         return result.all()
-    
+
     async def get_reply_count(self, parent_id: UUID, session: AsyncSession):
         result = await self.get_replies(parent_id)
         return len(result)
