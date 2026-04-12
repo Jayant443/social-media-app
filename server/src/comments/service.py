@@ -3,10 +3,16 @@ from sqlmodel import select
 from src.comments.model import Comment
 from src.comments.schema import CommentCreate, CommentUpdate
 from uuid import UUID
+from src.posts.service import PostService
+
+post_service = PostService()
 
 class CommentService:
-    async def create_comment(comment: CommentCreate, session: AsyncSession) -> Comment:
-        comment = Comment(**comment.dict())
+    async def create_comment(post_id: UUID, author_id: UUID, comment: CommentCreate, session: AsyncSession) -> Comment:
+        comment_data_dict = comment.dict()
+        comment_data_dict["post_id"] = post_id
+        comment_data_dict["author_id"] = author_id
+        comment = Comment(**comment_data_dict)
         session.add(comment)
         await session.commit()
         await session.refresh(comment)

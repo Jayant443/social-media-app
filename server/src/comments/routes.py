@@ -10,15 +10,15 @@ from uuid import UUID
 comment_router = APIRouter()
 comment_service = CommentService()
 
-@comment_router.post("/", response_model=CommentSchema)
-async def create_comment(comment: CommentCreate, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
-    return await comment_service.create_comment(comment, session)
+@comment_router.post("/{post_id}/comment", response_model=CommentSchema)
+async def create_comment(post_id: UUID, comment: CommentCreate, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    return await comment_service.create_comment(post_id, current_user.id, comment, session)
 
 @comment_router.get("/{comment_id}", response_model=CommentSchema)
 async def get_comment(comment_id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     return await comment_service.get_comment(comment_id, session)
 
-@comment_router.get("/post/{post_id}", response_model=list[CommentSchema])
+@comment_router.get("/{post_id}", response_model=list[CommentSchema])
 async def get_comments_by_post(post_id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     return await comment_service.get_comments_by_post(post_id, session)
 

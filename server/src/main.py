@@ -27,7 +27,7 @@ app.add_middleware(
 app.include_router(user_router, prefix=f"/user", tags=["user"])
 app.include_router(auth_router, prefix=f"/auth", tags=["auth"])
 app.include_router(community_router, prefix=f"/r", tags=["r"])
-app.include_router(post_router, prefix=f"/post", tags=["post"])
+app.include_router(post_router, prefix=f"/posts", tags=["post"])
 app.include_router(comment_router, prefix=f"/comments", tags=["comments"])
 app.include_router(vote_router, prefix=f"/votes", tags=["votes"])
 
