@@ -1,7 +1,33 @@
 import './Auth.css';
 import WelcomeHeader from '../components/WelcomeHeader';
+import React, { useState } from 'react';
+import type { AuthResponse, RegisterRequest } from '../types/user';
+import { register } from '../api/apiClient';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
+    const navigate = useNavigate();
+    const [formData, setFormdata] = useState<RegisterRequest>({
+        username: "",
+        email: "",
+        password: ""
+    });
+
+    function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+        const {name, value} = e.target;
+        setFormdata(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    }
+
+    async function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
+        e.preventDefault();
+        const user: AuthResponse = await register(formData);
+        localStorage.setItem("token", user.accessToken);
+        navigate('/feed');
+    }
+    
     return (
         <>
             <div className="auth-container">
@@ -19,13 +45,13 @@ function Signup() {
                 <div className="auth">
                     <h3>Create your account</h3>
                     <p>Join the community today</p>
-                    <form className="signup-form">
+                    <form className="signup-form" onSubmit={handleSubmit}>
                         <label htmlFor="username">Username</label>
-                        <input name="username" placeholder="Create a username" required />
+                        <input name="username" value={formData.username} onChange={handleChange} placeholder="Create a username" required />
                         <label htmlFor="email">Email</label>
-                        <input name="email" placeholder="your@email.com" required />
+                        <input name="email" value={formData.email} onChange={handleChange} placeholder="your@email.com" required />
                         <label htmlFor="password">Password</label>
-                        <input type="password" placeholder="•••••••••••••" required />
+                        <input name='password' type="password" value={formData.password} onChange={handleChange} placeholder="•••••••••••••" required />
                         <button type="submit">Sign up</button>
                         <p>Already have an account? <a href="./login">Sign in</a></p>
                     </form>
