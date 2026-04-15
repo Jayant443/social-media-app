@@ -1,6 +1,6 @@
 import axios from "axios";
 import { authRoutes, userRoute } from "./routes";
-import type { AuthResponse, RegisterRequest, User } from "../types/user";
+import type { AuthResponse, LoginRequest, RegisterRequest, User } from "../types/user";
 
 const getConfig = () => {
     const token = localStorage.getItem("token");
@@ -28,5 +28,20 @@ export const register = async (userData: RegisterRequest): Promise<AuthResponse>
         {
             headers: {},
         });
+    return res.data;
+}
+
+export const login = async (userData: LoginRequest): Promise<AuthResponse> => {
+    const params = new URLSearchParams();
+    params.append('username', userData.username);
+    params.append('password', userData.password);
+    const res = await axios.post(`${authRoutes}/login`,
+        params,
+        {
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+        }
+    );
     return res.data;
 }
