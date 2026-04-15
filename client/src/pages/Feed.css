@@ -186,6 +186,7 @@
 
 .create-post-btn:hover {
     background-color: #e64800;
+    transform:scale(1.03, 1.03)
 }
 
 .sidebar > * {
@@ -218,7 +219,7 @@
     color: rgb(0, 0, 0);
     font-size: 12px;
     font-weight: 600;
-    padding: 6px 12px;
+    padding: 6px 20px;
     border-radius: 9px;
     border: 1px solid #cecece;
     cursor: pointer;

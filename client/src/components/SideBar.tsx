@@ -6,7 +6,7 @@ function SideBar() {
             <aside className="sidebar">
                 <div className="side-card card">
                     <h3>Home</h3>
-                    <p>Your personal Reddish frontpage. Come here to check in with your favorite communities.</p>
+                    <p>Your personal Super Reddit frontpage. Come here to check in with your favorite communities.</p>
                     <button className="create-post-btn">Create Post</button>
                 </div>
                 <div className="side-card card">
