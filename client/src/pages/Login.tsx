@@ -33,8 +33,8 @@ function Login() {
                 <div className="welcome">
                     <WelcomeHeader />
                     <div className="description">
-                        <p>Join thousands of communities, share your passions, and connect with people who share your interests.</p>
-                        <ul>
+                        <p id='desc-line'>Join thousands of communities, share your passions, and connect with people who share your interests.</p>
+                        <ul id='desc-list'>
                             <li>100K+ active communities</li>
                             <li>Millions of posts and discussions</li>
                             <li>Find your people</li>

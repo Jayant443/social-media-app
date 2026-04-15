@@ -34,8 +34,8 @@ function Signup() {
                 <div className="welcome">
                     <WelcomeHeader />
                     <div className="description">
-                        <p>Create an account and join millions of people sharing their stories, ideas, and passions.</p>
-                        <ul>
+                        <p id='desc-line'>Create an account and join millions of people sharing their stories, ideas, and passions.</p>
+                        <ul id='desc-list'>
                             <li>Free to join and easy to use</li>
                             <li>Connect with like-minded people</li>
                             <li>Share and discover content</li>

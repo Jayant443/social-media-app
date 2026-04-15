@@ -1,9 +1,14 @@
-
-
+import Navbar from "../components/Navbar";
+import './Feed.css';
 function Feed() {
     return (
         <>
-            <p>Welcome to super reddit</p>
+            <div className="container">
+                <Navbar />
+                <main className="main-layout">
+
+                </main>
+            </div>
         </>
     )
 }
