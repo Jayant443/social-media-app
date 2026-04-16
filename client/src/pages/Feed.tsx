@@ -9,6 +9,7 @@ import { getUser, getUserJoinedCommunities } from "../api/apiClient";
 import type { Community } from "../types/community";
 import { formatDate } from "../utils/formatDate";
 import CommunityPage from "../components/CommunityPage";
+import { FiArrowLeft } from "react-icons/fi";
 
 function Feed() {
     const [feedDisplay, setFeedDisplay] = useState<string>("feed");
@@ -35,13 +36,14 @@ function Feed() {
             <div className="container">
                 <Navbar currentUser={currentUser} />
                 <main className="main-layout">
-                    {feedDisplay==="feed" && (<div className="feed-posts">
+                    {(<button className="back-btn" onClick={() => setFeedDisplay("feed")}><FiArrowLeft /></button>)}
+                    {feedDisplay === "feed" && (<div className="feed-posts">
                         <PostCard />
                         <PostCard />
                     </div>
                     )}
-                    {feedDisplay==="create-post" && <CreatePostForm onCancel={() => setFeedDisplay("feed")} />}
-                    {feedDisplay==="community" && <CommunityPage community={currentCommunityDisplay}/>}
+                    {feedDisplay === "create-post" && <CreatePostForm onCancel={() => setFeedDisplay("feed")} />}
+                    {feedDisplay === "community" && <CommunityPage community={currentCommunityDisplay} />}
                     <SideBar setFeed={(el: string) => setFeedDisplay(el)} setCurrentCommunity={(community) => setCurrentCommunityDisplay(community)} communities={currentUserCommunities} />
                 </main>
             </div>

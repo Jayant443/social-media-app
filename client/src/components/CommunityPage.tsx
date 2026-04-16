@@ -16,7 +16,7 @@ function CommunityPage({ community }: {community: Community | null}) {
             </div>
             <div className="community-stats card">
                 <div><strong>1.2M</strong><span>Members</span></div>
-                <div><strong>Created</strong><span>{formatDate(community?.created_at)}</span></div>
+                <div><strong>Created</strong><span>{community?.created_at ? formatDate(community?.created_at) : "Uknown"}</span></div>
             </div>
             <div className="community-about card">
                 <h3>About Community</h3>

@@ -131,6 +131,7 @@
 
 .main-layout {
     display: flex;
+    position: relative;
     justify-content: space-between;
     align-items: flex-start;
     gap: 20px;
@@ -170,6 +171,27 @@
     padding: 0 40px;
 }
 
+.back-btn {
+    position: fixed;
+    top: 80px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border: none;
+    border-radius: 50%;
+    background: #ffffff;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: 0.2s;
+}
+
+.back-btn:hover {
+    background: #f3f5f9;
+}
+
 .post-card {
     display: flex;
     background: #ffffff;
@@ -177,7 +199,6 @@
     border-radius: 14px;
     margin-bottom: 16px;
     padding: 1.5rem;
-    width: 90%;
     overflow: hidden;
     transition: all 0.2s ease;
 }
@@ -353,9 +374,6 @@
 }
 
 .form-group select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     padding: 10px 40px 10px 12px;
     border-radius: 10px;
     border: 1px solid #ddd;
