@@ -1,6 +1,7 @@
 import axios from "axios";
 import { authRoutes, userRoute } from "./routes";
 import type { AuthResponse, LoginRequest, RegisterRequest, User } from "../types/user";
+import type { Community } from "../types/community";
 
 const getConfig = () => {
     const token = localStorage.getItem("token");
@@ -14,6 +15,11 @@ const getConfig = () => {
 
 export const getUser = async (): Promise<User> => {
     const res = await axios.get(`${userRoute}/me`, getConfig());
+    return res.data;
+}
+
+export const getUserJoinedCommunities = async (): Promise<Community[]> => {
+    const res = await axios.get(`${userRoute}/me/communities`, getConfig());
     return res.data;
 }
 

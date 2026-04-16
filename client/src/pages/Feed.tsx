@@ -5,39 +5,44 @@ import SideBar from "../components/SideBar";
 import './Feed.css';
 import CreatePostForm from "../components/CreatePostForm";
 import type { User } from "../types/user";
-import { getUser } from "../api/apiClient";
+import { getUser, getUserJoinedCommunities } from "../api/apiClient";
+import type { Community } from "../types/community";
+import { formatDate } from "../utils/formatDate";
+import CommunityPage from "../components/CommunityPage";
 
 function Feed() {
-    const [feedDisplay, setFeedDisplay] = useState<boolean>(true);
+    const [feedDisplay, setFeedDisplay] = useState<string>("feed");
     const [currentUser, setCurrentUser] = useState<User | null>(null);
+    const [currentUserCommunities, setCurrentUserCommunities] = useState<Community[]>([]);
+    const [currentCommunityDisplay, setCurrentCommunityDisplay] = useState<Community | null>(null);
 
     useEffect(() => {
-        function formatDate(joinDate: string): string {
-            const d = new Date(joinDate);
-            return `${d.getDate()}-${d.getMonth()+1}-${d.getFullYear()}`;
-        }
-
         async function getProfile() {
-                const user: User = await getUser();
-                user.created_at = formatDate(user.created_at);
-                setCurrentUser(user);
+            const user: User = await getUser();
+            user.created_at = formatDate(user.created_at);
+            setCurrentUser(user);
         }
-
+        async function fetchUserCommunities() {
+            const communities: Community[] = await getUserJoinedCommunities();
+            setCurrentUserCommunities(communities);
+        }
         getProfile();
+        fetchUserCommunities();
     }, []);
 
     return (
         <>
             <div className="container">
-                <Navbar currentUser={currentUser}/>
+                <Navbar currentUser={currentUser} />
                 <main className="main-layout">
-                    {feedDisplay && (<div className="feed-posts">
+                    {feedDisplay==="feed" && (<div className="feed-posts">
                         <PostCard />
                         <PostCard />
                     </div>
                     )}
-                    {!feedDisplay && <CreatePostForm onCancel={() => setFeedDisplay(true)}/>}
-                    <SideBar setFeed={() => setFeedDisplay(false)} />
+                    {feedDisplay==="create-post" && <CreatePostForm onCancel={() => setFeedDisplay("feed")} />}
+                    {feedDisplay==="community" && <CommunityPage community={currentCommunityDisplay}/>}
+                    <SideBar setFeed={(el: string) => setFeedDisplay(el)} setCurrentCommunity={(community) => setCurrentCommunityDisplay(community)} communities={currentUserCommunities} />
                 </main>
             </div>
         </>
