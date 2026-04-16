@@ -113,7 +113,7 @@ form {
     flex-direction: column;
 }
 
-.login-form, .signup-form label {
+.login-form label {
     font-size: 12px;
     font-weight: bold;
     margin-bottom: 5px;
@@ -121,7 +121,15 @@ form {
     text-transform: uppercase;
 }
 
-.login-form, .signup-form input {
+.signup-form label {
+    font-size: 12px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #1a1a1b;
+    text-transform: uppercase;
+}
+
+.login-form input {
     padding: 12px 16px;
     margin-bottom: 14px;
     border: 1px solid #edeff1;
@@ -130,6 +138,17 @@ form {
     font-size: 14px;
     transition: border 0.2s;
 }
+
+.signup-form input {
+    padding: 12px 16px;
+    margin-bottom: 14px;
+    border: 1px solid #edeff1;
+    border-radius: 8px;
+    background-color: #f6f7f8;
+    font-size: 14px;
+    transition: border 0.2s;
+}
+
 
 .login-form input:focus {
     outline: none;
@@ -141,7 +160,20 @@ form {
     border: 1px solid #ff4500;
 }
 
-.login-form, .signup-form button {
+.login-form button {
+    background-color: #030303;
+    color: white;
+    padding: 8px;
+    border: none;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    transition: opacity 0.2s;
+}
+
+.signup-form button {
     background-color: #030303;
     color: white;
     padding: 8px;
