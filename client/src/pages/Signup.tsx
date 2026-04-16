@@ -24,7 +24,7 @@ function Signup() {
     async function handleSubmit(e: React.ChangeEvent<HTMLFormElement>) {
         e.preventDefault();
         const user: AuthResponse = await register(formData);
-        localStorage.setItem("token", user.accessToken);
+        localStorage.setItem("token", user.access_token);
         navigate('/feed');
     }
     

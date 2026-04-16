@@ -2,12 +2,12 @@ export interface User {
     id: string,
     username: string,
     email: string,
-    avatarUrl: string,
+    avatar_url: string,
     bio: string,
-    isActive: boolean,
-    isAdmin: boolean,
-    createdAt: Date,
-    updatedAt: Date
+    is_active: boolean,
+    is_admin: boolean,
+    created_at: string,
+    updated_at: string
 }
 
 export interface RegisterRequest {
@@ -22,6 +22,6 @@ export interface LoginRequest {
 }
 
 export interface AuthResponse {
-    accessToken: string,
-    tokenType: string
+    access_token: string,
+    token_type: string
 }

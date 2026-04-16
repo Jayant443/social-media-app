@@ -1,6 +1,7 @@
 import { FiUser, FiBell, FiPlus, FiSearch } from 'react-icons/fi';
+import type { User } from '../types/user';
 
-function Navbar() {
+function Navbar({ currentUser }: { currentUser: User | null }) {
     return (
         <>
             <nav className="navbar">
@@ -15,7 +16,7 @@ function Navbar() {
                     <div className="nav-actions">
                         <button className="icon-btn"><FiPlus size={24} /></button>
                         <button className="icon-btn"><FiBell size={24}/></button>
-                        <div className="user-profile"><span><FiUser size={24}/></span><span>John Doe</span></div>
+                        <div className="user-profile"><span><FiUser size={24}/></span><span>{currentUser?.username}</span></div>
                     </div>
                 </div>
             </nav>
