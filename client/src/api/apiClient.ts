@@ -1,7 +1,7 @@
 import axios from "axios";
 import { authRoute, communityRoute, userRoute } from "./routes";
 import type { AuthResponse, LoginRequest, RegisterRequest, User } from "../types/user";
-import type { Community } from "../types/community";
+import type { Community, CommunityResponse } from "../types/community";
 
 const getConfig = () => {
     const token = localStorage.getItem("token");
@@ -59,5 +59,10 @@ export const getCommunityMemberCount = async (communityId: string | null): Promi
 
 export const getCommunityPostCount = async (communityId: string | null): Promise<number> => {
     const res = await axios.get<number>(`${communityRoute}/${communityId}/posts/count`, getConfig());
+    return res.data;
+}
+
+export const createCommunity = async (formData: FormData): Promise<CommunityResponse> => {
+    const res = await axios.post(`${communityRoute}/create`, formData, getConfig());
     return res.data;
 }

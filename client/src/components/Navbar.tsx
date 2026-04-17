@@ -2,7 +2,7 @@ import { FiUser, FiBell, FiPlus, FiSearch } from 'react-icons/fi';
 import { useState, useRef, useEffect } from 'react';
 import type { User } from '../types/user';
 
-function Navbar({ currentUser, setFeedDisplay }: { currentUser: User | null, setFeedDisplay: (el:string) => void }) {
+function Navbar({ currentUser, setFeedDisplay }: { currentUser: User | null, setFeedDisplay: (el: string) => void }) {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     useEffect(() => {
@@ -28,7 +28,7 @@ function Navbar({ currentUser, setFeedDisplay }: { currentUser: User | null, set
                             <button className="icon-btn" onClick={() => setOpen(prev => !prev)}><FiPlus size={24} /></button>
                             {open && (
                                 <div className="dropdown-menu">
-                                    <div className="dropdown-item">Create Post</div>
+                                    <div className="dropdown-item" onClick={() => setFeedDisplay("create-post")}>Create Post</div>
                                     <div className="dropdown-item" onClick={() => setFeedDisplay("create-community")}>Create Community</div>
                                 </div>
                             )}
