@@ -1,8 +1,8 @@
 import axios from "axios";
-import { authRoute, communityRoute, userRoute } from "./routes";
+import { authRoute, communityRoute, postRoute, userRoute } from "./routes";
 import type { AuthResponse, LoginRequest, RegisterRequest, User } from "../types/user";
 import type { Community, CommunityResponse } from "../types/community";
-import type { PostResponse } from "../types/post";
+import type { Post, PostResponse } from "../types/post";
 
 const getConfig = () => {
     const token = localStorage.getItem("token");
@@ -82,3 +82,8 @@ export const getUserById = async (id: string): Promise<User> => {
     const res = await axios.get(`${userRoute}/${id}/get`, getConfig());
     return res.data;
 }
+
+export const getRecentPosts = async (): Promise<Post[]> => {
+    const res = await axios.get(`${postRoute}/recent`, getConfig());
+    return res.data;
+};

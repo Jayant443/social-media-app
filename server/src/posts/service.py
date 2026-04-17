@@ -2,6 +2,9 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from uuid import UUID
 from typing import Optional, List
 from sqlmodel import select
+from sqlalchemy.sql import desc
+from src.communities.model import Community
+from src.users.model import User
 from src.posts.model import Post, SavedPost
 from src.posts.schema import CreatePostSchema, UpdatePostSchema, PostSchema, SavedPostSchema, SavePostSchema
 
@@ -19,7 +22,18 @@ class PostService:
     async def get_post(self, id: UUID, session: AsyncSession) -> Optional[Post]:
         result = await session.exec(select(Post).where(Post.id == id))
         return result.first()
-
+    
+    async def get_recent_posts(self, session: AsyncSession):
+        result = await session.exec(select(Post, User.username, Community.name).join(User, Post.author_id == User.id).join(Community, Post.community_id == Community.id).order_by(Post.created_at.desc()))
+        rows = result.all()
+        posts = []
+        for post, username, community_name in rows:
+            posts.append({
+                **post.dict(),
+                "author_username": username,
+                "community_name": community_name
+            })
+        return posts
     async def edit_post(self, id: UUID, post: UpdatePostSchema, session: AsyncSession) -> Optional[Post]:
         db_post = await session.get(Post, id)
         if not db_post or db_post.is_deleted:

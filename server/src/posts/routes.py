@@ -3,12 +3,17 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from src.core.database import get_session
 from src.users.model import User
 from src.dependencies.auth import get_current_user
-from src.posts.schema import CreatePostSchema, UpdatePostSchema, PostSchema, SavedPostSchema, SavePostSchema
+from src.posts.schema import CreatePostSchema, RecentPostsSchema, UpdatePostSchema, PostSchema, SavedPostSchema, SavePostSchema
 from src.posts.service import PostService
 from uuid import UUID
+from typing import List
 
 post_router = APIRouter()
 post_service = PostService()
+
+@post_router.get("/recent", response_model=List[RecentPostsSchema])
+async def get_recent_posts(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    return await post_service.get_recent_posts(session)
 
 @post_router.post("/{community_id}/create", response_model=PostSchema)
 async def create_post(community_id: UUID, post: CreatePostSchema, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):

@@ -29,6 +29,11 @@ class PostSchema(PostBase):
     updated_at: datetime
     model_config=ConfigDict(from_attributes=True)
 
+class RecentPostsSchema(PostSchema):
+    author_username: str
+    community_name: str
+    model_config=ConfigDict(from_attributes=True)
+
 class SavePostSchema(BaseModel):
     post_id: UUID
 
