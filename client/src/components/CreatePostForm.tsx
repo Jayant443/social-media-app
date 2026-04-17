@@ -3,6 +3,7 @@ import { FiFileText, FiImage, FiLink, FiUpload } from "react-icons/fi";
 
 function CreatePostForm({ onCancel }: {onCancel: () => void}) {
     const [tab, setTab] = useState<string>("text");
+    const [imagePreview, setImagePreview] = useState<string | null>(null);
 
     return (
         <div className="create-post-form card">
@@ -39,7 +40,8 @@ function CreatePostForm({ onCancel }: {onCancel: () => void}) {
                     <FiUpload size={28} />
                     <p>Drag & drop an image here</p>
                     <span>or click to upload</span>
-                    <input type="file" />
+                    <input type="file" onChange={(e) => {const file = e.target.files?.[0]; if (file) setImagePreview(URL.createObjectURL(file)); }}/>
+                    {imagePreview && <img src={imagePreview} style={{ width: "50%", borderRadius: "10px" }} />}
                 </div>
             )}
             {tab === "link" && (
