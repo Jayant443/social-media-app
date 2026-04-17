@@ -44,7 +44,7 @@ function Feed() {
                     </div>
                     )}
                     {feedDisplay === "create-post" && <CreatePostForm onCancel={() => setFeedDisplay("feed")} />}
-                    {feedDisplay === "community" && <CommunityPage community={currentCommunityDisplay} />}
+                    {feedDisplay === "community" && <CommunityPage community={currentCommunityDisplay} currentUser={currentUser}/>}
                     {feedDisplay === "create-community" && <CreateCommunityForm onCancel={() => setFeedDisplay("feed")} />}
                     <SideBar setFeed={(el: string) => setFeedDisplay(el)} setCurrentCommunity={(community) => setCurrentCommunityDisplay(community)} communities={currentUserCommunities} />
                 </main>

@@ -601,6 +601,37 @@ select option {
     justify-content: center;
 }
 
+.community-actions {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid #ddd;
+    background: white;
+    cursor: pointer;
+}
+
+.leave-btn {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: none;
+    background: #ff5100;
+    color: white;
+    cursor: pointer;
+}
+
+.join-btn {
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+}
+
 .join-btn {
     position: absolute;
     right: 16px;

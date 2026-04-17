@@ -2,9 +2,17 @@ import { useEffect, useState } from "react";
 import type { Community, CommunityResponse } from "../types/community";
 import { formatDate } from "../utils/formatDate";
 import { getCommunityMemberCount, getCommunityPostCount } from "../api/apiClient";
+import type { User } from "../types/user";
 
-function CommunityPage({ community }: {community: CommunityResponse | null}) {
+type Props = {
+    community: CommunityResponse | null,
+    currentUser: User | null
+}
+
+function CommunityPage({ community, currentUser }: Props) {
     const [communityDetails, setCommunityDetails] = useState<Community | null>(null);
+    const isOwner: boolean = community?.created_by === currentUser?.id;
+
     useEffect(() => {
         async function getFullCommunityData(id: string | null) {
             const [memberCount, postCount] = await Promise.all([
@@ -23,12 +31,15 @@ function CommunityPage({ community }: {community: CommunityResponse | null}) {
     return (
         <div className="community-page">
             <div className="community-header card">
-                <div className="community-banner" style={{backgroundImage: `url(${community?.banner_url})`,}}></div>
+                <div className="community-banner" style={{ backgroundImage: `url(${community?.banner_url})`, }}></div>
                 <div className="community-info">
-                    <div className="community-avatar" style={{backgroundImage: `url(${community?.icon_url})`}}>{!community?.icon_url && `r/`}</div>
+                    <div className="community-avatar" style={{ backgroundImage: `url(${community?.icon_url})` }}>{!community?.icon_url && `r/`}</div>
                     <div><h2>r/{community?.name}</h2></div>
                 </div>
-                <button className="join-btn">Join</button>
+                {isOwner ? (<div className="community-actions">
+                    <button className="edit-btn">Edit</button>
+                    <button className="leave-btn">Leave</button>
+                </div>) : (<button className="join-btn">Join</button>)}
             </div>
             <div className="community-stats card">
                 <div><strong>{communityDetails?.member_count ? communityDetails?.member_count : 0}</strong><span>Members</span></div>
