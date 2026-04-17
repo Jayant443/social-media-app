@@ -14,19 +14,31 @@ function CommunityPage({ community, currentUser }: Props) {
     const isOwner: boolean = community?.created_by === currentUser?.id;
 
     useEffect(() => {
-        async function getFullCommunityData(id: string | null) {
-            const [memberCount, postCount] = await Promise.all([
-                getCommunityMemberCount(id),
-                getCommunityPostCount(id)
-            ]);
-            const fullCommunity: Community = {
-                ...community,
-                member_count: memberCount,
-                post_count: postCount,
-            } as Community;
-            setCommunityDetails(fullCommunity);
+        let isActive = true;
+        async function getFullCommunityData(id: string) {
+            try {
+                const [memberCount, postCount] = await Promise.all([
+                    getCommunityMemberCount(id),
+                    getCommunityPostCount(id)
+                ]);
+                if (!isActive) return;
+                const fullCommunity: Community = {
+                    ...community!,
+                    member_count: memberCount,
+                    post_count: postCount,
+                };
+                setCommunityDetails(fullCommunity);
+            } catch (err) {
+                console.error(err);
+                if (isActive) setCommunityDetails(null);
+            }
         }
-        getFullCommunityData(community?.id ? community.id : "");
+        if (community?.id) getFullCommunityData(community.id);
+
+        return () => {
+            isActive = false;
+        };
+
     }, [community]);
     return (
         <div className="community-page">
