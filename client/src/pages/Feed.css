@@ -312,6 +312,14 @@
     color: #333;
 }
 
+.clickable {
+    cursor: pointer;
+}
+
+.clickable:hover {
+    text-decoration: underline;
+}
+
 .post-title {
     font-size: 16px;
     font-weight: 600;

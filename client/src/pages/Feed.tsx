@@ -4,7 +4,7 @@ import SideBar from "../components/SideBar";
 import './Feed.css';
 import CreatePostForm from "../components/CreatePostForm";
 import type { User } from "../types/user";
-import { getRandomCommunities, getRecentPosts, getUser } from "../api/apiClient";
+import { getCommunityByName, getRandomCommunities, getRecentPosts, getUser } from "../api/apiClient";
 import type { CommunityResponse } from "../types/community";
 import { formatDate } from "../utils/formatDate";
 import CommunityPage from "../components/CommunityPage";
@@ -39,6 +39,15 @@ function Feed() {
         fetchCommunities();
     }, []);
 
+    const handleCommunityClick = async (name: string) => {
+        const community = await getCommunityByName(name);
+
+        if (community) {
+            setCurrentCommunityDisplay(community);
+            setFeedDisplay("community");
+        }
+    };
+
     return (
         <>
             <div className="container">
@@ -46,7 +55,7 @@ function Feed() {
                 <main className="main-layout">
                     {(<button className="back-btn" onClick={() => setFeedDisplay("feed")}><FiArrowLeft /></button>)}
                     {feedDisplay === "feed" && (<div className="feed-posts">
-                        {posts.map(post => (<PostCard key={post.id} post={post} />))}
+                        {posts.map(post => (<PostCard key={post.id} post={post} onCommunityClick={handleCommunityClick}/>))}
                     </div>
                     )}
                     {feedDisplay === "create-post" && <CreatePostForm onCancel={() => setFeedDisplay("feed")} />}

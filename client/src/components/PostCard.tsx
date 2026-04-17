@@ -3,7 +3,12 @@ import { useState } from "react";
 import type { Post } from "../types/post";
 import { formatDate } from "../utils/formatDate";
 
-function PostCard({ post }: {post: Post}) {
+type Props = {
+    post: Post;
+    onCommunityClick: (communityName: string) => void;
+};
+
+function PostCard({ post, onCommunityClick }: Props) {
     const [open, setOpen] = useState(false);
 
     return (
@@ -20,7 +25,7 @@ function PostCard({ post }: {post: Post}) {
                     )}
                 </div>
                 <div className="post-meta">
-                    <span className="subreddit">r/{post.community_name}</span>
+                    <span className="subreddit clickable" onClick={() => onCommunityClick(post.community_name)}> r/{post.community_name}</span>
                     <span> Posted by u/{post.author_username} • {formatDate(post.created_at.toString())}</span>
                 </div>
                 <h3 className="post-title">{post.title}</h3>

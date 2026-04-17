@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Community, CommunityResponse } from "../types/community";
 import { formatDate } from "../utils/formatDate";
-import { getCommunityMemberCount, getCommunityPostCount, getCommunityPosts, getUserById } from "../api/apiClient";
+import { getCommunityByName, getCommunityMemberCount, getCommunityPostCount, getCommunityPosts, getUserById } from "../api/apiClient";
 import type { User } from "../types/user";
 import type { PostResponse, Post } from "../types/post";
 import PostCard from "./PostCard";
@@ -68,6 +68,11 @@ function CommunityPage({ community, currentUser }: Props) {
         };
 
     }, [community]);
+
+    const handleCommunityClick = async (name: string) => {
+        await getCommunityByName(name);
+    };
+
     return (
         <>
             <div className="community-page">
@@ -92,7 +97,7 @@ function CommunityPage({ community, currentUser }: Props) {
                     <p>{community?.description}</p>
                 </div>
                 <div className="community-posts">
-                    {communityPosts.map(post => (<PostCard key={post.id} post={post} />))}
+                    {communityPosts.map(post => (<PostCard key={post.id} post={post} onCommunityClick={handleCommunityClick} />))}
                 </div>
             </div>
         </>

@@ -87,3 +87,8 @@ export const getRecentPosts = async (): Promise<Post[]> => {
     const res = await axios.get(`${postRoute}/recent`, getConfig());
     return res.data;
 };
+
+export const getCommunityByName = async (name: string): Promise<CommunityResponse> => {
+    const res = await axios.get(`${communityRoute}/name/${name}`, getConfig());
+    return res.data;
+}

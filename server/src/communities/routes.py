@@ -41,6 +41,13 @@ async def get_community(id: UUID, session: AsyncSession = Depends(get_session), 
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Community not found")
     return db_community
 
+@community_router.get("/name/{name}", response_model=CommunitySchema)
+async def get_community_by_name(name: str, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    db_community = await community_service.get_community_by_name(name, session)
+    if not db_community:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Community not found")
+    return db_community
+
 @community_router.patch("/{id}", response_model=CommunitySchema)
 async def update_community(id: UUID, description: str = Form(None), banner: Optional[UploadFile] = File(None), icon: Optional[UploadFile] = File(None), session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     existing = await community_service.get_community(id, session)
