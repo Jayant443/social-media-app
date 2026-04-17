@@ -70,6 +70,11 @@ async def delete_user(current_user: User = Depends(get_current_user), session: A
 @user_router.get("/{username}", response_model=UserSchema)
 async def get_user_by_username(username: str, session: AsyncSession = Depends(get_session)):
     user = await user_service.get_user(username, session)
+    return user
+
+@user_router.get("/{id}/get", response_model=UserSchema)
+async def get_user_by_id(id: UUID, session: AsyncSession = Depends(get_session)):
+    user = await user_service.get_user_by_id(id, session)
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return user

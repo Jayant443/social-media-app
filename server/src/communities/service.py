@@ -31,7 +31,6 @@ class CommunityService:
     
     async def get_random_communities(self, session: AsyncSession, limit: int = 10) -> List[CommunitySchema]:
         result = await session.exec(select(Community).order_by(func.random()).limit(limit))
-        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHH", result)
         return result.all()
 
     async def update_community(self, id: UUID, community: UpdateCommunitySchema, session: AsyncSession) -> Optional[Community]:

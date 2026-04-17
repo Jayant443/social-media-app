@@ -1,14 +1,13 @@
-import {
-    FiArrowUp, FiArrowDown, FiMessageSquare, FiShare,
-    FiMoreHorizontal, FiBookmark, FiEyeOff, FiFlag
-} from "react-icons/fi";
+import { FiArrowUp, FiArrowDown, FiMessageSquare, FiShare, FiMoreHorizontal, FiBookmark, FiEyeOff, FiFlag } from "react-icons/fi";
 import { useState } from "react";
+import type { Post } from "../types/post";
+import { formatDate } from "../utils/formatDate";
 
-function PostCard() {
+function PostCard({ post }: {post: Post}) {
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="post-card">
+        <div className="post-card" >
             <div className="post-content">
                 <div className="post-options">
                     <button className="options-btn" onClick={() => setOpen(!open)}><FiMoreHorizontal /></button>
@@ -21,18 +20,18 @@ function PostCard() {
                     )}
                 </div>
                 <div className="post-meta">
-                    <span className="subreddit">r/TodayILearned</span>
-                    <span> Posted by u/curiousMind • 6 days ago</span>
+                    <span className="subreddit">r/{post.community_name}</span>
+                    <span> Posted by u/{post.author_username} • {formatDate(post.created_at.toString())}</span>
                 </div>
-                <h3 className="post-title">TIL that octopuses have three hearts and blue blood</h3>
-                <p className="post-body">We have Chat GPT Enterprise edition for our org. We have created and deployed client interactions summaries in various workflows and also a chatbot which responds to our questions.My problem, LLM does not remember chat beyond last 3 instances and that too it has to be same session. Once session is over, no memory!Second problem, we have provided Thumbs up and down to users to provide us feedback but how we make LLM learn from this feedback?</p>
+                <h3 className="post-title">{post.title}</h3>
+                <p className="post-body">{post.body}</p>
                 <div className="post-actions">
                     <div className="vote-box">
                         <FiArrowUp />
-                        <span>44.3k</span>
+                        <span>{post.votes_score}</span>
                         <FiArrowDown />
                     </div>
-                    <div className="action"><FiMessageSquare /><span>3.4k Comments</span></div>
+                    <div className="action"><FiMessageSquare /><span>{post.comment_count} Comments</span></div>
                     <div className="action"><FiShare /><span>Share</span></div>
                 </div>
             </div>

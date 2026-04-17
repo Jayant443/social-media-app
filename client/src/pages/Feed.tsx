@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
-import PostCard from "../components/PostCard";
 import SideBar from "../components/SideBar";
 import './Feed.css';
 import CreatePostForm from "../components/CreatePostForm";
@@ -39,8 +38,7 @@ function Feed() {
                 <main className="main-layout">
                     {(<button className="back-btn" onClick={() => setFeedDisplay("feed")}><FiArrowLeft /></button>)}
                     {feedDisplay === "feed" && (<div className="feed-posts">
-                        <PostCard />
-                        <PostCard />
+                        
                     </div>
                     )}
                     {feedDisplay === "create-post" && <CreatePostForm onCancel={() => setFeedDisplay("feed")} />}
