@@ -30,6 +30,10 @@ async def create_community(name: str = Form(...), description: str = Form(None),
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Community already exists")
     return db_community
 
+@community_router.get("/discover/random", response_model=List[CommunitySchema])
+async def get_random_communities(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    return await community_service.get_random_communities(session)
+
 @community_router.get("/{id}", response_model=CommunitySchema)
 async def get_community(id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     db_community = await community_service.get_community(id, session)

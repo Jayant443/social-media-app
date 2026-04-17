@@ -2,6 +2,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from uuid import UUID
 from typing import Optional, List
 from sqlmodel import select, or_
+from sqlalchemy.sql import func
 from src.communities.model import Community, CommunityMember
 from src.communities.schema import CreateCommunitySchema, UpdateCommunitySchema, CommunitySchema, CommunityMemberSchema
 from src.posts.model import Post
@@ -27,6 +28,11 @@ class CommunityService:
     async def get_community_by_name(self, name: str, session: AsyncSession) -> Optional[Community]:
         result = await session.exec(select(Community).where(Community.name==name))
         return result.first()
+    
+    async def get_random_communities(self, session: AsyncSession, limit: int = 10) -> List[CommunitySchema]:
+        result = await session.exec(select(Community).order_by(func.random()).limit(limit))
+        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHH", result)
+        return result.all()
 
     async def update_community(self, id: UUID, community: UpdateCommunitySchema, session: AsyncSession) -> Optional[Community]:
         db_community = await session.get(Community, id)

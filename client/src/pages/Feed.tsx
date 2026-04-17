@@ -5,7 +5,7 @@ import SideBar from "../components/SideBar";
 import './Feed.css';
 import CreatePostForm from "../components/CreatePostForm";
 import type { User } from "../types/user";
-import { getUser, getUserJoinedCommunities } from "../api/apiClient";
+import { getRandomCommunities, getUser } from "../api/apiClient";
 import type { CommunityResponse } from "../types/community";
 import { formatDate } from "../utils/formatDate";
 import CommunityPage from "../components/CommunityPage";
@@ -24,12 +24,12 @@ function Feed() {
             user.created_at = formatDate(user.created_at);
             setCurrentUser(user);
         }
-        async function fetchUserCommunities() {
-            const communities: CommunityResponse[] = await getUserJoinedCommunities();
+        async function fetchCommunities() {
+            const communities: CommunityResponse[] = await getRandomCommunities();
             setCurrentUserCommunities(communities);
         }
         getProfile();
-        fetchUserCommunities();
+        fetchCommunities();
     }, []);
 
     return (

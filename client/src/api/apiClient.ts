@@ -52,6 +52,11 @@ export const getUserJoinedCommunities = async (): Promise<Community[]> => {
     return res.data;
 }
 
+export const getRandomCommunities = async (): Promise<Community[]> => {
+    const res = await axios.get(`${communityRoute}/discover/random`, getConfig());
+    return res.data;
+}
+
 export const getCommunityMemberCount = async (communityId: string | null): Promise<number> => {
     const res = await axios.get<number>(`${communityRoute}/${communityId}/members/count`, getConfig());
     return res.data;
