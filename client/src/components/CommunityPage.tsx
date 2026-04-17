@@ -1,29 +1,23 @@
 import { useEffect, useState } from "react";
 import type { Community, CommunityResponse } from "../types/community";
 import { formatDate } from "../utils/formatDate";
-import { getCommunityMemberCount, getCommunityPostCount, getUserJoinedCommunities } from "../api/apiClient";
+import { getCommunityMemberCount, getCommunityPostCount } from "../api/apiClient";
 
 function CommunityPage({ community }: {community: CommunityResponse | null}) {
     const [communityDetails, setCommunityDetails] = useState<Community | null>(null);
 
     useEffect(() => {
         async function getFullCommunityData(id: string | null) {
-            const [communities, memberCount, postCount] = await Promise.all([
-                getUserJoinedCommunities(),
+            const [memberCount, postCount] = await Promise.all([
                 getCommunityMemberCount(id),
                 getCommunityPostCount(id)
             ]);
-
-            const community = communities.find(c => c.id === id);
-            if (!community) {
-                throw new Error("Community not found");
-            }
 
             const fullCommunity: Community = {
                 ...community,
                 member_count: memberCount,
                 post_count: postCount,
-            };
+            } as Community;
 
             setCommunityDetails(fullCommunity);
         }
