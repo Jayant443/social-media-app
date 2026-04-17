@@ -6,7 +6,7 @@ import './Feed.css';
 import CreatePostForm from "../components/CreatePostForm";
 import type { User } from "../types/user";
 import { getUser, getUserJoinedCommunities } from "../api/apiClient";
-import type { Community } from "../types/community";
+import type { CommunityResponse } from "../types/community";
 import { formatDate } from "../utils/formatDate";
 import CommunityPage from "../components/CommunityPage";
 import { FiArrowLeft } from "react-icons/fi";
@@ -14,8 +14,8 @@ import { FiArrowLeft } from "react-icons/fi";
 function Feed() {
     const [feedDisplay, setFeedDisplay] = useState<string>("feed");
     const [currentUser, setCurrentUser] = useState<User | null>(null);
-    const [currentUserCommunities, setCurrentUserCommunities] = useState<Community[]>([]);
-    const [currentCommunityDisplay, setCurrentCommunityDisplay] = useState<Community | null>(null);
+    const [currentUserCommunities, setCurrentUserCommunities] = useState<CommunityResponse[]>([]);
+    const [currentCommunityDisplay, setCurrentCommunityDisplay] = useState<CommunityResponse | null>(null);
 
     useEffect(() => {
         async function getProfile() {
@@ -24,7 +24,7 @@ function Feed() {
             setCurrentUser(user);
         }
         async function fetchUserCommunities() {
-            const communities: Community[] = await getUserJoinedCommunities();
+            const communities: CommunityResponse[] = await getUserJoinedCommunities();
             setCurrentUserCommunities(communities);
         }
         getProfile();

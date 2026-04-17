@@ -1,4 +1,4 @@
-export interface Community {
+export interface CommunityResponse {
     id: string,
     name: string,
     description: string,
@@ -8,4 +8,9 @@ export interface Community {
     is_private: boolean,
     is_restricted: boolean,
     created_at: string
+}
+
+export interface Community extends CommunityResponse {
+    member_count: number,
+    post_count: number,
 }

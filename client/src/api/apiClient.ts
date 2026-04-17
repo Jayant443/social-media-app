@@ -1,5 +1,5 @@
 import axios from "axios";
-import { authRoutes, userRoute } from "./routes";
+import { authRoute, communityRoute, userRoute } from "./routes";
 import type { AuthResponse, LoginRequest, RegisterRequest, User } from "../types/user";
 import type { Community } from "../types/community";
 
@@ -18,18 +18,13 @@ export const getUser = async (): Promise<User> => {
     return res.data;
 }
 
-export const getUserJoinedCommunities = async (): Promise<Community[]> => {
-    const res = await axios.get(`${userRoute}/me/communities`, getConfig());
-    return res.data;
-}
-
 export const register = async (userData: RegisterRequest): Promise<AuthResponse> => {
     const formData = new FormData();
     formData.append('username', userData.username);
     formData.append('email', userData.email);
     formData.append('password', userData.password);
     const res = await axios.post(
-        `${authRoutes}/register`,
+        `${authRoute}/register`,
         formData,
         {
             headers: {},
@@ -41,7 +36,7 @@ export const login = async (userData: LoginRequest): Promise<AuthResponse> => {
     const params = new URLSearchParams();
     params.append('username', userData.username);
     params.append('password', userData.password);
-    const res = await axios.post(`${authRoutes}/login`,
+    const res = await axios.post(`${authRoute}/login`,
         params,
         {
             headers: {
@@ -49,5 +44,20 @@ export const login = async (userData: LoginRequest): Promise<AuthResponse> => {
             },
         }
     );
+    return res.data;
+}
+
+export const getUserJoinedCommunities = async (): Promise<Community[]> => {
+    const res = await axios.get(`${userRoute}/me/communities`, getConfig());
+    return res.data;
+}
+
+export const getCommunityMemberCount = async (communityId: string | null): Promise<number> => {
+    const res = await axios.get<number>(`${communityRoute}/${communityId}/members/count`, getConfig());
+    return res.data;
+}
+
+export const getCommunityPostCount = async (communityId: string | null): Promise<number> => {
+    const res = await axios.get<number>(`${communityRoute}/${communityId}/posts/count`, getConfig());
     return res.data;
 }

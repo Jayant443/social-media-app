@@ -1,7 +1,7 @@
-import type { Community } from "../types/community";
+import type { CommunityResponse } from "../types/community";
 
 
-function SideBar({ setFeed, setCurrentCommunity, communities }: { setFeed: (el:string) => void, setCurrentCommunity: (community: Community) => void, communities: Community[] }) {
+function SideBar({ setFeed, setCurrentCommunity, communities }: { setFeed: (el:string) => void, setCurrentCommunity: (community: CommunityResponse) => void, communities: CommunityResponse[] }) {
     return (
         <>
             <aside className="sidebar">
