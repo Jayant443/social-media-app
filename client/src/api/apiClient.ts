@@ -1,8 +1,9 @@
 import axios from "axios";
-import { authRoute, communityRoute, postRoute, userRoute } from "./routes";
+import { authRoute, communityRoute, postRoute, userRoute, voteRoute } from "./routes";
 import type { AuthResponse, LoginRequest, RegisterRequest, User } from "../types/user";
 import type { Community, CommunityResponse } from "../types/community";
 import type { Post, PostResponse } from "../types/post";
+import type { VoteResponse, VoteValue } from "../types/vote";
 
 const getConfig = () => {
     const token = localStorage.getItem("token");
@@ -97,3 +98,13 @@ export const createPost = async (communityId: string, formData: FormData): Promi
     const res = await axios.post(`${postRoute}/${communityId}/create`, formData, getConfig());
     return res.data;
 }
+
+export const voteOnPost = async (postId: string, value: VoteValue): Promise<VoteResponse> => {
+    const response = await axios.post(`${voteRoute}/post/${postId}/vote`, null, {...getConfig(), params: { value } }, );
+    return response.data;
+};
+
+export const voteOnComment = async (commentId: string, value: VoteValue): Promise<VoteResponse> => {
+    const response = await axios.post(`${voteRoute}/comment/${commentId}/vote`, null, {...getConfig(),  params: { value } });
+    return response.data;
+};

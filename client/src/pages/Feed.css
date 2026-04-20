@@ -363,9 +363,13 @@
     background: #f3f5f9;
     padding: 4px 10px;
     border-radius: 999px;
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
     color: #555;
+}
+
+.vote-box button {
+    border: none;
 }
 
 .vote-box svg {
@@ -374,11 +378,11 @@
 }
 
 .vote-box svg:hover:first-child {
-    color: #ff5100;
+    color: #7193ff;
 }
 
 .vote-box svg:hover:last-child {
-    color: #7193ff;
+    color: #ff5100;
 }
 
 .action {

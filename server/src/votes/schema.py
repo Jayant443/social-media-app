@@ -3,7 +3,6 @@ from datetime import datetime
 from uuid import UUID
 
 class VoteBase(BaseModel):
-    user_id: UUID
     target_id: UUID
     target_type: str
 
@@ -15,5 +14,6 @@ class VoteUpdate(BaseModel):
 
 class Vote(VoteBase):
     id: UUID
+    user_id: UUID
     created_at: datetime
     model_config = ConfigDict(from_attributes=True)

@@ -2,6 +2,7 @@ import { FiArrowUp, FiArrowDown, FiMessageSquare, FiShare, FiMoreHorizontal, FiB
 import { useState } from "react";
 import type { Post } from "../types/post";
 import { formatDate } from "../utils/formatDate";
+import { useVote } from "../hooks/useVote";
 
 type Props = {
     post: Post;
@@ -10,6 +11,11 @@ type Props = {
 
 function PostCard({ post, onCommunityClick }: Props) {
     const [open, setOpen] = useState(false);
+    const { score, currentVote, vote, loading } = useVote({
+        targetId: post.id,
+        targetType: "post",
+        initialScore: post.votes_score,
+    });
 
     return (
         <div className="post-card" >
@@ -32,9 +38,9 @@ function PostCard({ post, onCommunityClick }: Props) {
                 <p className="post-body">{post.body}</p>
                 <div className="post-actions">
                     <div className="vote-box">
-                        <FiArrowUp />
-                        <span>{post.votes_score}</span>
-                        <FiArrowDown />
+                        <button onClick={() => vote(1)} disabled={loading} style={{ color: currentVote === 1 ? "orange" : "inherit", background: "none", border: "none", cursor: "pointer" }}><FiArrowUp /></button>
+                        <span>{score}</span>
+                        <button onClick={() => vote(-1)} disabled={loading} style={{ color: currentVote === -1 ? "blue" : "inherit", background: "none", border: "none", cursor: "pointer" }}><FiArrowDown /></button>
                     </div>
                     <div className="action"><FiMessageSquare /><span>{post.comment_count} Comments</span></div>
                     <div className="action"><FiShare /><span>Share</span></div>

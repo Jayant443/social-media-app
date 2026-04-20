@@ -1,47 +1,48 @@
 from sqlmodel.ext.asyncio.session import AsyncSession
 from src.votes.model import Vote
 from src.votes.schema import VoteCreate, VoteUpdate
+from src.posts.model import Post
+from src.comments.model import Comment
 from typing import Optional
 from uuid import UUID
 from sqlmodel import select
+from fastapi import HTTPException
 
 class VoteService:
     async def get_vote(self, vote_id: UUID, session: AsyncSession) -> Optional[Vote]:
-        result = await session.get(Vote, vote_id)
-        return result.first()
+        return await session.get(Vote, vote_id)
 
     async def get_votes(self, session: AsyncSession) -> list[Vote]:
         result = await session.exec(select(Vote))
         return result.all()
-
-    async def up_vote(self, vote: VoteCreate, session: AsyncSession) -> Vote:
-        result = await session.exec(select(Vote).where(Vote.user_id == vote.user_id, Vote.target_id == vote.target_id, Vote.target_type == vote.target_type))
-        existing_vote = result.first()
+    
+    async def vote(self, user_id: UUID, target_id: UUID, target_type: str, value: int, session: AsyncSession):
+        if value not in (1, -1):
+            raise HTTPException(status_code=400, detail="Vote value must be 1 or -1")
+        existing_vote = await session.exec(select(Vote).where( Vote.user_id == user_id, Vote.target_id == target_id, Vote.target_type == target_type))
+        existing_vote = existing_vote.first()
+        if target_type == "post":
+            target = await session.get(Post, target_id)
+        else:
+            target = await session.get(Comment, target_id)
+        if not target:
+            raise HTTPException(status_code=404, detail=f"{target_type} not found")
         if existing_vote:
-            return None
-        db_vote = Vote(**vote.dict())
-        session.add(db_vote)
+            if existing_vote.value == value:
+                target.votes_score -= value
+                await session.delete(existing_vote)
+            else:
+                target.votes_score += (value - existing_vote.value)
+                existing_vote.value = value
+                session.add(existing_vote)
+        else:
+            target.votes_score += value
+            new_vote = Vote(user_id=user_id, target_id=target_id, target_type=target_type, value=value)
+            session.add(new_vote)
+        session.add(target)
         await session.commit()
-        await session.refresh(db_vote)
-        return db_vote
-
-    async def down_vote(self, vote_id: UUID, vote: VoteUpdate, session: AsyncSession) -> Optional[Vote]:
-        db_vote = await self.get_vote(vote_id, session)
-        if not db_vote:
-            return None
-        db_vote.value = -1
-        session.add(db_vote)
-        await session.commit()
-        await session.refresh(db_vote)
-        return db_vote
-
-    async def delete_vote(self, vote_id: UUID, session: AsyncSession) -> bool:
-        db_vote = await self.get_vote(vote_id, session)
-        if not db_vote:
-            return False
-        await session.delete(db_vote)
-        await session.commit()
-        return True
+        await session.refresh(target)
+        return target
 
     async def get_user_vote(self, user_id: UUID, target_id: UUID, session: AsyncSession) -> Optional[Vote]:
         result = await session.exec(select(Vote).where(Vote.user_id == user_id, Vote.target_id == target_id))
