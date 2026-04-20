@@ -15,7 +15,7 @@ class Community(SQLModel, table=True):
     __tablename__="communities"
 
     id: UUID = Field(sa_column=Column(BinaryUUID, primary_key=True, default=uuid4))
-    name: str = Field(index=True, unique=True)
+    name: str = Field(unique=True)
     description: Optional[str] = None
     banner_url: Optional[str] = None
     icon_url: Optional[str] = None
