@@ -1,15 +1,15 @@
 import { FiArrowUp, FiArrowDown, FiMessageSquare, FiShare, FiMoreHorizontal, FiBookmark, FiEyeOff, FiFlag } from "react-icons/fi";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import type { Post } from "../types/post";
 import { formatDate } from "../utils/formatDate";
 import { useVote } from "../hooks/useVote";
 
 type Props = {
     post: Post;
-    onCommunityClick: (communityName: string) => void;
 };
 
-function PostCard({ post, onCommunityClick }: Props) {
+function PostCard({ post }: Props) {
     const [open, setOpen] = useState(false);
     const { score, currentVote, vote, loading } = useVote({
         targetId: post.id,
@@ -31,7 +31,7 @@ function PostCard({ post, onCommunityClick }: Props) {
                     )}
                 </div>
                 <div className="post-meta">
-                    <span className="subreddit clickable" onClick={() => onCommunityClick(post.community_name)}> r/{post.community_name}</span>
+                    <Link to={`/r/${post.community_name}`} className="subreddit clickable" style={{ textDecoration: 'none', color: '#333' }}>r/{post.community_name}</Link>
                     <span> Posted by u/{post.author_username} • {formatDate(post.created_at.toString())}</span>
                 </div>
                 <h3 className="post-title">{post.title}</h3>

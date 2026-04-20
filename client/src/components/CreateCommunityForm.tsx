@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiUpload } from "react-icons/fi";
 import { createCommunity } from "../api/apiClient";
 
-function CreateCommunityForm({ onCancel }: { onCancel: () => void }) {
+function CreateCommunityForm() {
+    const navigate = useNavigate();
     const [name, setName] = useState("");
     const [description, setDescription] = useState("");
     const [bannerPreview, setBannerPreview] = useState<string | null>(null);
@@ -17,9 +19,8 @@ function CreateCommunityForm({ onCancel }: { onCancel: () => void }) {
         if (bannerFile) formData.append("banner", bannerFile);
         if (iconFile) formData.append("icon", iconFile);
         try {
-            const response = await createCommunity(formData);
-            console.log(response);
-            onCancel();
+            await createCommunity(formData);
+            navigate(`/r/${name}`);
         } catch (err) { console.error(err); }
     };
 
@@ -67,7 +68,7 @@ function CreateCommunityForm({ onCancel }: { onCancel: () => void }) {
                 </div>
                 <div className="form-actions">
                     <button className="post-btn" onClick={handleCreate}>Create</button>
-                    <button className="cancel-btn" onClick={onCancel}>Cancel</button>
+                    <button className="cancel-btn" onClick={() => navigate('/')}>Cancel</button>
                 </div>
             </div>
         </>

@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import type { CommunityResponse } from "../types/community";
 import { joinCommunity } from "../api/apiClient";
 
-
-function SideBar({ setFeed, setCurrentCommunity, communities, joinedCommunityIds }: { setFeed: (el:string) => void, setCurrentCommunity: (community: CommunityResponse) => void, communities: CommunityResponse[], joinedCommunityIds: Set<string> }) {
+function SideBar({ communities, joinedCommunityIds }: { communities: CommunityResponse[], joinedCommunityIds: Set<string> }) {
     const [joinedIds, setJoinedIds] = useState<Set<string>>(joinedCommunityIds);
     const [loadingId, setLoadingId] = useState<string | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setJoinedIds(joinedCommunityIds);
@@ -30,13 +31,15 @@ function SideBar({ setFeed, setCurrentCommunity, communities, joinedCommunityIds
                 <div className="side-card card">
                     <h3>Home</h3>
                     <p>Your personal Super Reddit frontpage. Come here to check in with your favorite communities.</p>
-                    <button className="create-post-btn" onClick={() => setFeed("create-post")}>Create Post</button>
+                    <button className="create-post-btn" onClick={() => navigate('/submit')}>Create Post</button>
                 </div>
                 <div className="side-card card">
                     <h3>Trending Communities</h3>
                     {communities.map(community => (
-                        <div className="community-btn" key={community.id} onClick={() => setCurrentCommunity(community)}>
-                            <span onClick={() => setFeed("community")}>r/{community.name}</span>
+                        <div className="community-btn" key={community.id}>
+                            <Link to={`/r/${community.name}`} style={{ textDecoration: 'none', color: 'inherit', fontWeight: 500, fontSize: '14px' }}>
+                                r/{community.name}
+                            </Link>
                             {joinedIds.has(community.id) ? (
                                 <button disabled className="joined-btn">Joined</button>
                             ) : (

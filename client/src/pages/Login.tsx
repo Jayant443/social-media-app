@@ -24,7 +24,7 @@ function Login() {
         e.preventDefault();
         const user: AuthResponse = await login(formData);
         localStorage.setItem("token", user.access_token);
-        navigate('/feed');
+        navigate('/');
     }
     
     return (

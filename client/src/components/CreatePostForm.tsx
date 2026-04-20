@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { FiFileText, FiImage, FiLink, FiUpload } from "react-icons/fi";
 import type { Community } from "../types/community";
 import { createPost, getUserJoinedCommunities } from "../api/apiClient";
 
-function CreatePostForm({ onCancel }: { onCancel: () => void }) {
+function CreatePostForm() {
+    const navigate = useNavigate();
     const [tab, setTab] = useState<string>("text");
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [userComunities, setUserComunities] = useState<Community[]>([]);
@@ -34,7 +36,7 @@ function CreatePostForm({ onCancel }: { onCancel: () => void }) {
         if ( imageFile) formData.append("image", imageFile);
         try {
             await createPost(selectedCommunity, formData);
-            onCancel();
+            navigate('/');
         } catch (err) { console.error("Failed to create post", err); }
     }
 
@@ -83,7 +85,7 @@ function CreatePostForm({ onCancel }: { onCancel: () => void }) {
                 )}
                 <div className="form-actions">
                     <button className="post-btn" onClick={handleSubmit}>Post</button>
-                    <button className="cancel-btn" onClick={onCancel}>Cancel</button>
+                    <button className="cancel-btn" onClick={() => navigate('/')}>Cancel</button>
                 </div>
             </div>
         </>

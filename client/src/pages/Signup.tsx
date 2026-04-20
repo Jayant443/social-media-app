@@ -25,7 +25,7 @@ function Signup() {
         e.preventDefault();
         const user: AuthResponse = await register(formData);
         localStorage.setItem("token", user.access_token);
-        navigate('/feed');
+        navigate('/');
     }
     
     return (
