@@ -63,7 +63,7 @@ function CommunityPage({ community, currentUser }: Props) {
         async function checkMembership(communityId: string) {
             try {
                 const members = await getCommunityMembers(communityId);
-                const found = members.some((m: any) => m.user_id === currentUser?.id);
+                const found = members.some((m) => m.user_id === currentUser?.id);
                 if (isActive) setIsMember(found);
             } catch {
                 if (isActive) setIsMember(false);
@@ -123,16 +123,18 @@ function CommunityPage({ community, currentUser }: Props) {
                         <div className="community-avatar" style={{ backgroundImage: `url(${community?.icon_url})` }}>{!community?.icon_url && `r/`}</div>
                         <div><h2>r/{community?.name}</h2></div>
                     </div>
-                    {isOwner ? (<div className="community-actions">
-                        <button className="edit-btn">Edit</button>
-                        <button className="leave-btn" onClick={handleLeave} disabled={joinLoading}>Leave</button>
-                    </div>) : (
+                    <div className="community-actions">{isOwner ? (
+                        <>
+                            <button className="edit-btn">Edit</button>
+                            <button className="leave-btn" onClick={handleLeave} disabled={joinLoading}>Leave</button>
+                        </>
+                    ) : (
                         isMember ? (
                             <button className="leave-btn" onClick={handleLeave} disabled={joinLoading}>{joinLoading ? "Leaving..." : "Leave"}</button>
                         ) : (
                             <button className="join-btn" onClick={handleJoin} disabled={joinLoading}>{joinLoading ? "Joining..." : "Join"}</button>
                         )
-                    )}
+                    )}</div>
                 </div>
                 <div className="community-stats card">
                     <div><strong>{communityDetails?.member_count ? communityDetails?.member_count : 0}</strong><span>Members</span></div>

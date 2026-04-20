@@ -660,15 +660,12 @@ select option {
 }
 
 .leave-btn {
-    position: absolute;
     padding: 8px 16px;
     border-radius: 999px;
     border: none;
     background: #ff5100;
     color: white;
     cursor: pointer;
-    right: 16px;
-    bottom: 16px;
 }
 
 .join-btn {
