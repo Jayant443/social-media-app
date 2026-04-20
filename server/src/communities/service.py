@@ -54,7 +54,7 @@ class CommunityService:
         return True
 
     async def join_community(self, user_id: UUID, community_id: UUID, session: AsyncSession) -> Optional[CommunityMember]:
-        community_member = CommunityMember(user_id=user_id, community_id=community_id)
+        community_member = CommunityMember(user_id=user_id, community_id=community_id, role="member")
         session.add(community_member)
         await session.commit()
         await session.refresh(community_member)
@@ -69,10 +69,10 @@ class CommunityService:
         await session.commit()
         return True
 
-    async def get_community_members(self, id: UUID, session: AsyncSession) -> Optional[List[CommunityMember]]:
+    async def get_community_members(self, id: UUID, session: AsyncSession) -> List[CommunityMember]:
         result = await session.exec(select(CommunityMember).where(CommunityMember.community_id == id))
-        return result.all()
+        return list(result.all())
 
-    async def get_community_posts(self, id: UUID, session: AsyncSession) -> Optional[List[Post]]:
+    async def get_community_posts(self, id: UUID, session: AsyncSession) -> List[Post]:
         result = await session.exec(select(Post).where(Post.community_id == id))
-        return result.all()
+        return list(result.all())

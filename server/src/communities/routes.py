@@ -86,28 +86,20 @@ async def leave_community(id: UUID, session: AsyncSession = Depends(get_session)
 @community_router.get("/{id}/members", response_model=List[CommunityMemberSchema])
 async def get_community_members(id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     db_community_members = await community_service.get_community_members(id, session)
-    if not db_community_members:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Members not found")
-    return db_community_members
+    return db_community_members or []
 
 @community_router.get("/{id}/posts", response_model=List[PostSchema])
 async def get_community_posts(id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     db_community_posts = await community_service.get_community_posts(id, session)
-    if not db_community_posts:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Posts not found")
-    return db_community_posts
+    return db_community_posts or []
 
 @community_router.get("/{id}/members/count")
 async def get_comunity_member_count(id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     db_community_members = await community_service.get_community_members(id, session)
-    if not db_community_members:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Members not found")
-    return len(db_community_members)
+    return len(db_community_members) if db_community_members else 0
 
 @community_router.get("/{id}/posts/count")
 async def get_comunity_post_count(id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
     db_community_posts = await community_service.get_community_posts(id, session)
-    if not db_community_posts:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Posts not found")
-    return len(db_community_posts)
+    return len(db_community_posts) if db_community_posts else 0
 

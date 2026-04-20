@@ -4,7 +4,7 @@ import SideBar from "../components/SideBar";
 import './Feed.css';
 import CreatePostForm from "../components/CreatePostForm";
 import type { User } from "../types/user";
-import { getCommunityByName, getRandomCommunities, getRecentPosts, getUser } from "../api/apiClient";
+import { getCommunityByName, getRandomCommunities, getRecentPosts, getUser, getUserJoinedCommunities } from "../api/apiClient";
 import type { CommunityResponse } from "../types/community";
 import { formatDate } from "../utils/formatDate";
 import CommunityPage from "../components/CommunityPage";
@@ -19,6 +19,7 @@ function Feed() {
     const [currentUserCommunities, setCurrentUserCommunities] = useState<CommunityResponse[]>([]);
     const [currentCommunityDisplay, setCurrentCommunityDisplay] = useState<CommunityResponse | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
+    const [joinedCommunityIds, setJoinedCommunityIds] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         async function getProfile() {
@@ -34,9 +35,18 @@ function Feed() {
             const data = await getRecentPosts();
             setPosts(data);
         }
+        async function fetchJoinedCommunities() {
+            try {
+                const joined = await getUserJoinedCommunities();
+                setJoinedCommunityIds(new Set(joined.map(c => c.id)));
+            } catch (err) {
+                console.error(err);
+            }
+        }
         fetchPosts();
         getProfile();
         fetchCommunities();
+        fetchJoinedCommunities();
     }, []);
 
     const handleCommunityClick = async (name: string) => {
@@ -61,7 +71,7 @@ function Feed() {
                     {feedDisplay === "create-post" && <CreatePostForm onCancel={() => setFeedDisplay("feed")} />}
                     {feedDisplay === "community" && <CommunityPage community={currentCommunityDisplay} currentUser={currentUser} />}
                     {feedDisplay === "create-community" && <CreateCommunityForm onCancel={() => setFeedDisplay("feed")} />}
-                    <SideBar setFeed={(el: string) => setFeedDisplay(el)} setCurrentCommunity={(community) => setCurrentCommunityDisplay(community)} communities={currentUserCommunities} />
+                    <SideBar setFeed={(el: string) => setFeedDisplay(el)} setCurrentCommunity={(community) => setCurrentCommunityDisplay(community)} communities={currentUserCommunities} joinedCommunityIds={joinedCommunityIds} />
                 </main>
             </div>
         </>

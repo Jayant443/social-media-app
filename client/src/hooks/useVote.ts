@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { VoteValue, VoteTarget } from "../types/vote";
-import { voteOnComment, voteOnPost } from "../api/apiClient";
+import { voteOnPost, voteOnComment } from "../api/apiClient";
 
 interface UseVoteProps {
     targetId: string;
@@ -13,9 +13,17 @@ export const useVote = ({ targetId, targetType, initialScore, initialVote = null
     const [score, setScore] = useState(initialScore);
     const [currentVote, setCurrentVote] = useState<VoteValue | null>(initialVote);
     const [loading, setLoading] = useState(false);
+    useEffect(() => {
+        setScore(initialScore);
+    }, [initialScore]);
+    useEffect(() => {
+        setCurrentVote(initialVote ?? null);
+    }, [initialVote]);
     const vote = async (value: VoteValue) => {
         if (loading) return;
         setLoading(true);
+        const prevScore = score;
+        const prevVote = currentVote;
         if (currentVote === value) {
             setScore(prev => prev - value);
             setCurrentVote(null);
@@ -28,11 +36,14 @@ export const useVote = ({ targetId, targetType, initialScore, initialVote = null
         }
         try {
             const fn = targetType === "post" ? voteOnPost : voteOnComment;
-            await fn(targetId, value);
+            const result = await fn(targetId, value);
+            if (result && typeof result.votes_score === "number") {
+                setScore(result.votes_score);
+            }
         } catch (err) {
             console.log(err);
-            setScore(initialScore);
-            setCurrentVote(initialVote);
+            setScore(prevScore);
+            setCurrentVote(prevVote);
         } finally {
             setLoading(false);
         }

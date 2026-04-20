@@ -79,6 +79,11 @@ export const getCommunityPosts = async (id: string): Promise<PostResponse[]> => 
     return res.data;
 }
 
+export const getCommunityMembers = async (communityId: string): Promise<any[]> => {
+    const res = await axios.get(`${communityRoute}/${communityId}/members`, getConfig());
+    return res.data;
+}
+
 export const getUserById = async (id: string): Promise<User> => {
     const res = await axios.get(`${userRoute}/${id}/get`, getConfig());
     return res.data;
@@ -96,6 +101,16 @@ export const getCommunityByName = async (name: string): Promise<CommunityRespons
 
 export const createPost = async (communityId: string, formData: FormData): Promise<PostResponse> => {
     const res = await axios.post(`${postRoute}/${communityId}/create`, formData, getConfig());
+    return res.data;
+}
+
+export const joinCommunity = async (communityId: string): Promise<any> => {
+    const res = await axios.post(`${communityRoute}/${communityId}/join`, null, getConfig());
+    return res.data;
+}
+
+export const leaveCommunity = async (communityId: string): Promise<any> => {
+    const res = await axios.post(`${communityRoute}/${communityId}/leave`, null, getConfig());
     return res.data;
 }
 

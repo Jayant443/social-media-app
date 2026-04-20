@@ -1,7 +1,29 @@
+import { useState, useEffect } from "react";
 import type { CommunityResponse } from "../types/community";
+import { joinCommunity } from "../api/apiClient";
 
 
-function SideBar({ setFeed, setCurrentCommunity, communities }: { setFeed: (el:string) => void, setCurrentCommunity: (community: CommunityResponse) => void, communities: CommunityResponse[] }) {
+function SideBar({ setFeed, setCurrentCommunity, communities, joinedCommunityIds }: { setFeed: (el:string) => void, setCurrentCommunity: (community: CommunityResponse) => void, communities: CommunityResponse[], joinedCommunityIds: Set<string> }) {
+    const [joinedIds, setJoinedIds] = useState<Set<string>>(joinedCommunityIds);
+    const [loadingId, setLoadingId] = useState<string | null>(null);
+
+    useEffect(() => {
+        setJoinedIds(joinedCommunityIds);
+    }, [joinedCommunityIds]);
+
+    const handleJoin = async (communityId: string) => {
+        if (loadingId) return;
+        setLoadingId(communityId);
+        try {
+            await joinCommunity(communityId);
+            setJoinedIds(prev => new Set(prev).add(communityId));
+        } catch (err) {
+            console.error("Failed to join community", err);
+        } finally {
+            setLoadingId(null);
+        }
+    };
+
     return (
         <>
             <aside className="sidebar">
@@ -15,7 +37,13 @@ function SideBar({ setFeed, setCurrentCommunity, communities }: { setFeed: (el:s
                     {communities.map(community => (
                         <div className="community-btn" key={community.id} onClick={() => setCurrentCommunity(community)}>
                             <span onClick={() => setFeed("community")}>r/{community.name}</span>
-                            {<button>Join</button>}
+                            {joinedIds.has(community.id) ? (
+                                <button disabled className="joined-btn">Joined</button>
+                            ) : (
+                                <button onClick={(e) => { e.stopPropagation(); handleJoin(community.id); }} disabled={loadingId === community.id}>
+                                    {loadingId === community.id ? "Joining..." : "Join"}
+                                </button>
+                            )}
                         </div>
                     ))}
                 </div>

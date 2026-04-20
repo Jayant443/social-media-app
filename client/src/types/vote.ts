@@ -9,14 +9,6 @@ export interface Vote {
 
 export interface VoteResponse {
   id: string;
-  vote_score: number;
-}
-
-export interface VoteResponse {
-    id: string,
-    user_id: string,
-    target_id: string,
-    target_type: VoteTarget,
-    value: VoteValue,
-    created_at: Date
+  votes_score: number;
+  [key: string]: any;
 }

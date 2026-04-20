@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Community, CommunityResponse } from "../types/community";
 import { formatDate } from "../utils/formatDate";
-import { getCommunityByName, getCommunityMemberCount, getCommunityPostCount, getCommunityPosts, getUserById } from "../api/apiClient";
+import { getCommunityByName, getCommunityMemberCount, getCommunityMembers, getCommunityPostCount, getCommunityPosts, getUserById, joinCommunity, leaveCommunity } from "../api/apiClient";
 import type { User } from "../types/user";
 import type { PostResponse, Post } from "../types/post";
 import PostCard from "./PostCard";
@@ -14,6 +14,8 @@ type Props = {
 function CommunityPage({ community, currentUser }: Props) {
     const [communityDetails, setCommunityDetails] = useState<Community | null>(null);
     const [communityPosts, setCommunityPosts] = useState<Post[]>([]);
+    const [isMember, setIsMember] = useState<boolean>(false);
+    const [joinLoading, setJoinLoading] = useState<boolean>(false);
     const isOwner: boolean = community?.created_by === currentUser?.id;
 
     useEffect(() => {
@@ -58,19 +60,58 @@ function CommunityPage({ community, currentUser }: Props) {
             }
         };
 
+        async function checkMembership(communityId: string) {
+            try {
+                const members = await getCommunityMembers(communityId);
+                const found = members.some((m: any) => m.user_id === currentUser?.id);
+                if (isActive) setIsMember(found);
+            } catch {
+                if (isActive) setIsMember(false);
+            }
+        }
+
         if (community?.id) {
             getFullCommunityData(community.id);
             fetchCommunityPosts(community.id);
+            if (currentUser) checkMembership(community.id);
         }
 
         return () => {
             isActive = false;
         };
 
-    }, [community]);
+    }, [community, currentUser]);
 
     const handleCommunityClick = async (name: string) => {
         await getCommunityByName(name);
+    };
+
+    const handleJoin = async () => {
+        if (!community?.id || joinLoading) return;
+        setJoinLoading(true);
+        try {
+            await joinCommunity(community.id);
+            setIsMember(true);
+            setCommunityDetails(prev => prev ? { ...prev, member_count: prev.member_count + 1 } : prev);
+        } catch (err) {
+            console.error("Failed to join community", err);
+        } finally {
+            setJoinLoading(false);
+        }
+    };
+
+    const handleLeave = async () => {
+        if (!community?.id || joinLoading) return;
+        setJoinLoading(true);
+        try {
+            await leaveCommunity(community.id);
+            setIsMember(false);
+            setCommunityDetails(prev => prev ? { ...prev, member_count: Math.max(0, prev.member_count - 1) } : prev);
+        } catch (err) {
+            console.error("Failed to leave community", err);
+        } finally {
+            setJoinLoading(false);
+        }
     };
 
     return (
@@ -84,8 +125,14 @@ function CommunityPage({ community, currentUser }: Props) {
                     </div>
                     {isOwner ? (<div className="community-actions">
                         <button className="edit-btn">Edit</button>
-                        <button className="leave-btn">Leave</button>
-                    </div>) : (<button className="join-btn">Join</button>)}
+                        <button className="leave-btn" onClick={handleLeave} disabled={joinLoading}>Leave</button>
+                    </div>) : (
+                        isMember ? (
+                            <button className="leave-btn" onClick={handleLeave} disabled={joinLoading}>{joinLoading ? "Leaving..." : "Leave"}</button>
+                        ) : (
+                            <button className="join-btn" onClick={handleJoin} disabled={joinLoading}>{joinLoading ? "Joining..." : "Join"}</button>
+                        )
+                    )}
                 </div>
                 <div className="community-stats card">
                     <div><strong>{communityDetails?.member_count ? communityDetails?.member_count : 0}</strong><span>Members</span></div>
