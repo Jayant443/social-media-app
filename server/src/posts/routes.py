@@ -1,12 +1,13 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Form, UploadFile, File
 from sqlmodel.ext.asyncio.session import AsyncSession
 from src.core.database import get_session
 from src.users.model import User
 from src.dependencies.auth import get_current_user
 from src.posts.schema import CreatePostSchema, RecentPostsSchema, UpdatePostSchema, PostSchema, SavedPostSchema, SavePostSchema
 from src.posts.service import PostService
+from src.utils.image_upload import upload_to_cloudinary
 from uuid import UUID
-from typing import List
+from typing import List, Optional
 
 post_router = APIRouter()
 post_service = PostService()
@@ -16,8 +17,19 @@ async def get_recent_posts(session: AsyncSession = Depends(get_session), current
     return await post_service.get_recent_posts(session)
 
 @post_router.post("/{community_id}/create", response_model=PostSchema)
-async def create_post(community_id: UUID, post: CreatePostSchema, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
-    return await post_service.create_post(current_user.id, community_id, post, session)
+async def create_post(community_id: UUID, title: str = Form(...), body: Optional[str] = Form(None), url: Optional[str] = Form(None), image: Optional[UploadFile] = File(None), session: AsyncSession = Depends(get_session),  current_user: User = Depends(get_current_user)):
+    image_url = None
+    if image:
+        image_bytes = await image.read()
+        image_url = await upload_to_cloudinary(image_bytes)
+    
+    post_data = CreatePostSchema(
+        title=title,
+        body=body,
+        url=url,
+        image_url=image_url
+    )
+    return await post_service.create_post(current_user.id, community_id, post_data, session)
 
 @post_router.get("/{id}", response_model=PostSchema)
 async def get_post(id: UUID, session: AsyncSession = Depends(get_session)):

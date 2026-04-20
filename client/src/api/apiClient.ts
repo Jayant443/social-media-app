@@ -92,3 +92,8 @@ export const getCommunityByName = async (name: string): Promise<CommunityRespons
     const res = await axios.get(`${communityRoute}/name/${name}`, getConfig());
     return res.data;
 }
+
+export const createPost = async (communityId: string, formData: FormData): Promise<PostResponse> => {
+    const res = await axios.post(`${postRoute}/${communityId}/create`, formData, getConfig());
+    return res.data;
+}

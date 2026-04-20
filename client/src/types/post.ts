@@ -3,6 +3,7 @@ export interface PostResponse {
     title: string,
     body: string | null,
     url: string | null,
+    image_url: string | null,
     author_id: string,
     community_id: string,
     votes_score: number,
@@ -16,4 +17,11 @@ export interface PostResponse {
 export interface Post extends PostResponse {
     author_username: string,
     community_name: string
+}
+
+export interface PostRequest {
+    title: string,
+    body: string | null,
+    url: string | null,
+    image_url: string | null
 }

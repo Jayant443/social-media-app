@@ -14,6 +14,7 @@ class Post(SQLModel, table=True):
     title: str = Field(max_length=200)
     body: Optional[str] = None
     url: Optional[str] = None
+    image_url: Optional[str] = None
     votes_score: int = Field(default=0)
     comment_count: int = Field(default=0)
     is_deleted: bool = Field(default=False)

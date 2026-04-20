@@ -7,6 +7,7 @@ class PostBase(BaseModel):
     title: str
     body: Optional[str] = None
     url: Optional[str] = None
+    image_url: Optional[str] = None
 
 class CreatePostSchema(PostBase):
     pass
