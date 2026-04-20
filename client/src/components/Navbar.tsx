@@ -35,7 +35,11 @@ function Navbar({ currentUser, setFeedDisplay }: { currentUser: User | null, set
                         </div>
                         <button className="icon-btn"><FiBell size={24} /></button>
                         <div className="user-profile">
-                            <span><FiUser size={24} /></span>
+                            {currentUser?.avatar_url ? (
+                                <img src={currentUser.avatar_url} alt="avatar" className='avatar'/>
+                            ) : (
+                                <FiUser size={20} />
+                            )}
                             <span>{currentUser?.username}</span>
                         </div>
                     </div>

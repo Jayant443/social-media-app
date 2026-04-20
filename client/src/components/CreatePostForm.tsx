@@ -1,9 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FiFileText, FiImage, FiLink, FiUpload } from "react-icons/fi";
+import type { Community } from "../types/community";
+import { getUserJoinedCommunities } from "../api/apiClient";
 
 function CreatePostForm({ onCancel }: {onCancel: () => void}) {
     const [tab, setTab] = useState<string>("text");
     const [imagePreview, setImagePreview] = useState<string | null>(null);
+    const [userComunities, setUserComunities] = useState<Community[]>([]);
+
+    useEffect(() => {
+        async function fetchUserJoinedCommunities(): Promise<void> {
+            const res = await getUserJoinedCommunities();
+            setUserComunities(res);
+        }
+        fetchUserJoinedCommunities();
+    }, []);
 
     return (
         <div className="create-post-form card">
@@ -12,10 +23,7 @@ function CreatePostForm({ onCancel }: {onCancel: () => void}) {
                 <label>Choose a community</label>
                 <select>
                     <option>Select a subreddit</option>
-                    <option>r/Technology</option>
-                    <option>r/Computer Science</option>
-                    <option>r/Programming</option>
-                    <option>r/Gaming</option>
+                    {userComunities.map((community) => (<option key={community.id}>r/{community.name}</option>))}
                 </select>
             </div>
             <div className="post-tabs">
