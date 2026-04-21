@@ -5,6 +5,7 @@
     flex-direction: column;
     background-color: #f6f8fb;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    overflow: hidden;
 }
 
 .navbar {
@@ -710,7 +711,7 @@ select option {
     width: 25%;
     flex-shrink: 0;
     position: sticky;
-    top: 0;
+    top: 20px;
 }
 
 .card {

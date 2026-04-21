@@ -31,9 +31,12 @@ async def create_post(community_id: UUID, title: str = Form(...), body: Optional
     )
     return await post_service.create_post(current_user.id, community_id, post_data, session)
 
-@post_router.get("/{id}", response_model=PostSchema)
+@post_router.get("/{id}", response_model=RecentPostsSchema)
 async def get_post(id: UUID, session: AsyncSession = Depends(get_session)):
-    return await post_service.get_post(id, session)
+    result = await post_service.get_post(id, session)
+    if not result:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
+    return result
 
 @post_router.patch("/{id}", response_model=PostSchema)
 async def edit_post(id: UUID, post: UpdatePostSchema, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):

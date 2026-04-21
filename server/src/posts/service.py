@@ -19,9 +19,23 @@ class PostService:
         await session.refresh(post_data)
         return post_data
 
-    async def get_post(self, id: UUID, session: AsyncSession) -> Optional[Post]:
-        result = await session.exec(select(Post).where(Post.id == id))
-        return result.first()
+    async def get_post(self, id: UUID, session: AsyncSession) -> Optional[dict]:
+        result = await session.exec(
+            select(Post, User.username, User.avatar_url, Community.name)
+            .join(User, Post.author_id == User.id)
+            .join(Community, Post.community_id == Community.id)
+            .where(Post.id == id)
+        )
+        row = result.first()
+        if not row:
+            return None
+        post, username, avatar_url, community_name = row
+        return {
+            **post.dict(),
+            "author_username": username,
+            "author_avatar_url": avatar_url,
+            "community_name": community_name
+        }
     
     async def get_recent_posts(self, session: AsyncSession):
         result = await session.exec(select(Post, User.username, User.avatar_url, Community.name).join(User, Post.author_id == User.id).join(Community, Post.community_id == Community.id).order_by(Post.created_at.desc()))

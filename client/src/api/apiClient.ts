@@ -145,7 +145,7 @@ export const voteOnComment = async (commentId: string, value: VoteValue): Promis
     return response.data;
 };
 
-export const getPostById = async (postId: string): Promise<PostResponse> => {
+export const getPostById = async (postId: string): Promise<Post> => {
     const res = await axios.get(`${postRoute}/${postId}`, getConfig());
     return res.data;
 }

@@ -14,6 +14,16 @@ class CommentService:
         comment = CommentCreate(author_id=author_id, post_id=post_id, body=body, parent_id=parent_id)
         comment = Comment(**comment.dict(exclude_unset=True))
         session.add(comment)
+
+        # Increment comment_count on the post
+        if post_id:
+            from src.posts.model import Post
+            result = await session.exec(select(Post).where(Post.id == post_id))
+            post = result.first()
+            if post:
+                post.comment_count += 1
+                session.add(post)
+
         await session.commit()
         await session.refresh(comment)
         return comment

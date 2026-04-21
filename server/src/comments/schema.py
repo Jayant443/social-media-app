@@ -18,7 +18,7 @@ class CommentUpdate(BaseModel):
 
 class CommentSchema(CommentBase):
     id: UUID
-    vote_score: int = 0
+    votes_score: int = 0
     is_deleted: bool = False
     created_at: datetime
     updated_at: datetime
