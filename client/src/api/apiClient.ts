@@ -1,7 +1,7 @@
 import axios from "axios";
 import { authRoute, communityRoute, postRoute, userRoute, voteRoute } from "./routes";
 import type { AuthResponse, LoginRequest, RegisterRequest, User } from "../types/user";
-import type { Community, CommunityResponse } from "../types/community";
+import type { Community, CommunityMember, CommunityResponse } from "../types/community";
 import type { Post, PostResponse } from "../types/post";
 import type { VoteResponse, VoteValue } from "../types/vote";
 
@@ -79,7 +79,7 @@ export const getCommunityPosts = async (id: string): Promise<PostResponse[]> => 
     return res.data;
 }
 
-export const getCommunityMembers = async (communityId: string): Promise<any[]> => {
+export const getCommunityMembers = async (communityId: string): Promise<CommunityMember[]> => {
     const res = await axios.get(`${communityRoute}/${communityId}/members`, getConfig());
     return res.data;
 }
@@ -104,12 +104,12 @@ export const createPost = async (communityId: string, formData: FormData): Promi
     return res.data;
 }
 
-export const joinCommunity = async (communityId: string): Promise<any> => {
+export const joinCommunity = async (communityId: string): Promise<CommunityMember> => {
     const res = await axios.post(`${communityRoute}/${communityId}/join`, null, getConfig());
     return res.data;
 }
 
-export const leaveCommunity = async (communityId: string): Promise<any> => {
+export const leaveCommunity = async (communityId: string): Promise<boolean> => {
     const res = await axios.post(`${communityRoute}/${communityId}/leave`, null, getConfig());
     return res.data;
 }

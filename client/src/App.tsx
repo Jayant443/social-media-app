@@ -14,6 +14,7 @@ import type { User } from './types/user';
 import type { CommunityResponse } from './types/community';
 import { formatDate } from './utils/formatDate';
 import './pages/Feed.css';
+import ProtectedRoute from './ProtectedRoute';
 
 export interface LayoutContext {
     currentUser: User | null;
@@ -64,11 +65,13 @@ function App() {
             <Routes>
                 <Route path='/login' element={<Login />} />
                 <Route path='/signup' element={<Signup />} />
-                <Route element={<Layout />}>
-                    <Route path='/' element={<Feed />} />
-                    <Route path='/submit' element={<CreatePost />} />
-                    <Route path='/r/create' element={<CreateCommunity />} />
-                    <Route path='/r/:communityName' element={<CommunityPage />} />
+                <Route element={<ProtectedRoute />}>
+                    <Route element={<Layout />}>
+                        <Route path='/' element={<Feed />} />
+                        <Route path='/submit' element={<CreatePost />} />
+                        <Route path='/r/create' element={<CreateCommunity />} />
+                        <Route path='/r/:communityName' element={<CommunityPage />} />
+                    </Route>
                 </Route>
             </Routes>
         </>

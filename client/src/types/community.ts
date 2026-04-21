@@ -14,3 +14,11 @@ export interface Community extends CommunityResponse {
     member_count: number,
     post_count: number,
 }
+
+export interface CommunityMember {
+    id: string,
+    user_id: string,
+    community_id: string,
+    role: string,
+    joined_at: Date
+}

@@ -60,11 +60,11 @@ class CommunityService:
         await session.refresh(community_member)
         return community_member
 
-    async def leave_community(self, user_id: UUID, community_id: UUID, session: AsyncSession) -> Optional[CommunityMember]:
+    async def leave_community(self, user_id: UUID, community_id: UUID, session: AsyncSession) -> bool:
         result = await session.exec(select(CommunityMember).where(or_(CommunityMember.user_id == user_id, CommunityMember.community_id == community_id)))
         db_community_member = result.first()
         if not db_community_member:
-            return None
+            return False
         await session.delete(db_community_member)
         await session.commit()
         return True
