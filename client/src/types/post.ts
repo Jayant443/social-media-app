@@ -10,8 +10,8 @@ export interface PostResponse {
     comment_count: number,
     is_deleted: boolean,
     is_pinned: boolean,
-    created_at: Date,
-    updated_at: Date
+    created_at: string,
+    updated_at: string
 }
 
 export interface Post extends PostResponse {

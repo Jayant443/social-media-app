@@ -31,7 +31,10 @@ function SideBar({ communities, joinedCommunityIds }: { communities: CommunityRe
                 <div className="side-card card">
                     <h3>Home</h3>
                     <p>Your personal Super Reddit frontpage. Come here to check in with your favorite communities.</p>
-                    <button className="create-post-btn" onClick={() => navigate('/submit')}>Create Post</button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                        <button className="create-post-btn" onClick={() => navigate('/submit')}>Create Post</button>
+                        <button className="cancel-btn" style={{ width: '100%', height: '40px' }} onClick={() => navigate('/saved')}>Saved Posts</button>
+                    </div>
                 </div>
                 <div className="side-card card">
                     <h3>Trending Communities</h3>

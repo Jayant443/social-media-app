@@ -31,6 +31,14 @@ async def create_post(community_id: UUID, title: str = Form(...), body: Optional
     )
     return await post_service.create_post(current_user.id, community_id, post_data, session)
 
+@post_router.get("/saved-ids", response_model=List[UUID])
+async def get_saved_post_ids(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    return await post_service.get_saved_post_ids(current_user.id, session)
+
+@post_router.get("/saved_posts", response_model=List[RecentPostsSchema])
+async def get_saved_posts(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    return await post_service.get_saved_posts(current_user.id, session)
+
 @post_router.get("/{id}", response_model=RecentPostsSchema)
 async def get_post(id: UUID, session: AsyncSession = Depends(get_session)):
     result = await post_service.get_post(id, session)
@@ -55,10 +63,10 @@ async def save_post(post: SavePostSchema, session: AsyncSession = Depends(get_se
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Post already saved")
     return result
 
-@post_router.delete("/unsave/{id}")
-async def unsave_post(id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
-    return await post_service.unsave_post(id, session)
+@post_router.delete("/unsave/{post_id}")
+async def unsave_post(post_id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
+    success = await post_service.unsave_post(current_user.id, post_id, session)
+    if not success:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Saved post not found")
+    return {"message": "Post unsaved"}
 
-@post_router.get("/saved_posts")
-async def get_saved_posts(session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
-    return await post_service.get_saved_posts(current_user.id, session)

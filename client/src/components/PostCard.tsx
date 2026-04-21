@@ -1,10 +1,12 @@
 import { FiArrowUp, FiArrowDown, FiMessageSquare, FiShare, FiMoreHorizontal, FiBookmark, FiEyeOff, FiFlag } from "react-icons/fi";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import type { Post } from "../types/post";
 import { formatDate } from "../utils/formatDate";
 import { useVote } from "../hooks/useVote";
 import { useNavigate } from "react-router-dom";
+import { savePost, unsavePost } from "../api/apiClient";
+import type { LayoutContext } from "../App";
 
 type Props = {
     post: Post;
@@ -13,6 +15,9 @@ type Props = {
 function PostCard({ post }: Props) {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
+    const { savedPostIds, setSavedPostIds } = useOutletContext<LayoutContext>();
+    const isSaved = savedPostIds.has(post.id);
+
     const { score, currentVote, vote, loading } = useVote({
         targetId: post.id,
         targetType: "post",
@@ -23,6 +28,26 @@ function PostCard({ post }: Props) {
         navigate(`/r/${post.community_name}/comments/${post.id}`);
     };
 
+    const handleSaveToggle = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        try {
+            if (isSaved) {
+                await unsavePost(post.id);
+                setSavedPostIds(prev => {
+                    const next = new Set(prev);
+                    next.delete(post.id);
+                    return next;
+                });
+            } else {
+                await savePost(post.id);
+                setSavedPostIds(prev => new Set(prev).add(post.id));
+            }
+            setOpen(false);
+        } catch (err) {
+            console.error("Failed to toggle save", err);
+        }
+    };
+
     return (
         <>
             <div className="post-card" >
@@ -31,7 +56,10 @@ function PostCard({ post }: Props) {
                         <button className="options-btn" onClick={() => setOpen(!open)}><FiMoreHorizontal /></button>
                         {open && (
                             <div className="options-menu">
-                                <div className="option-item"><FiBookmark /><span>Save</span></div>
+                                <div className="option-item" onClick={handleSaveToggle}>
+                                    <FiBookmark style={{ fill: isSaved ? "black" : "none" }} />
+                                    <span>{isSaved ? "Unsave" : "Save"}</span>
+                                </div>
                                 <div className="option-item"><FiEyeOff /><span>Hide</span></div>
                                 <div className="option-item danger"><FiFlag /><span>Report</span></div>
                             </div>

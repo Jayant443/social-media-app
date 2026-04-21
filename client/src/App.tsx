@@ -7,11 +7,12 @@ import CreatePost from './pages/CreatePost';
 import CreateCommunity from './pages/CreateCommunity';
 import UserProfile from './pages/UserProfile';
 import PostPage from './pages/PostPage';
+import SavedPosts from './pages/SavedPosts';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
 import SideBar from './components/SideBar';
-import { getRandomCommunities, getUser, getUserJoinedCommunities } from './api/apiClient';
+import { getRandomCommunities, getUser, getUserJoinedCommunities, getSavedPostIds } from './api/apiClient';
 import type { User } from './types/user';
 import type { CommunityResponse } from './types/community';
 import { formatDate } from './utils/formatDate';
@@ -22,25 +23,30 @@ export interface LayoutContext {
     currentUser: User | null;
     communities: CommunityResponse[];
     joinedCommunityIds: Set<string>;
+    savedPostIds: Set<string>;
+    setSavedPostIds: React.Dispatch<React.SetStateAction<Set<string>>>;
 }
 
 function Layout() {
     const [currentUser, setCurrentUser] = useState<User | null>(null);
     const [communities, setCommunities] = useState<CommunityResponse[]>([]);
     const [joinedCommunityIds, setJoinedCommunityIds] = useState<Set<string>>(new Set());
+    const [savedPostIds, setSavedPostIds] = useState<Set<string>>(new Set());
 
     useEffect(() => {
         async function fetchData() {
             try {
-                const [user, randomCommunities, joined] = await Promise.all([
+                const [user, randomCommunities, joined, savedIds] = await Promise.all([
                     getUser(),
                     getRandomCommunities(),
-                    getUserJoinedCommunities()
+                    getUserJoinedCommunities(),
+                    getSavedPostIds()
                 ]);
                 user.created_at = formatDate(user.created_at);
                 setCurrentUser(user);
                 setCommunities(randomCommunities);
                 setJoinedCommunityIds(new Set(joined.map(c => c.id)));
+                setSavedPostIds(new Set(savedIds));
             } catch (err) {
                 console.error("Failed to load layout data", err);
             }
@@ -48,7 +54,7 @@ function Layout() {
         fetchData();
     }, []);
 
-    const ctx: LayoutContext = { currentUser, communities, joinedCommunityIds };
+    const ctx: LayoutContext = { currentUser, communities, joinedCommunityIds, savedPostIds, setSavedPostIds };
 
     return (
         <div className="container">
@@ -75,6 +81,7 @@ function App() {
                         <Route path='/r/:communityName' element={<CommunityPage />} />
                         <Route path='/r/:communityName/comments/:postId' element={<PostPage />} />
                         <Route path='/user/:username' element={<UserProfile />} />
+                        <Route path='/saved' element={<SavedPosts />} />
                     </Route>
                 </Route>
             </Routes>
