@@ -5,6 +5,7 @@ from src.comments.schema import CommentCreate, CommentUpdate
 from uuid import UUID
 from src.posts.service import PostService
 from typing import Optional
+from src.users.model import User
 
 post_service = PostService()
 
@@ -21,13 +22,37 @@ class CommentService:
         result = await session.exec(select(Comment).where(Comment.id == comment_id))
         return result.first()
 
-    async def get_top_comments(self, post_id: UUID, session: AsyncSession) -> list[Comment]:
-        result = await session.exec(select(Comment).where(Comment.post_id == post_id, Comment.parent_id==None))
-        return result.all()
+    async def get_top_comments(self, post_id: UUID, session: AsyncSession) -> list[dict]:
+        result = await session.exec(
+            select(Comment, User.username, User.avatar_url)
+            .join(User, Comment.author_id == User.id)
+            .where(Comment.post_id == post_id, Comment.parent_id == None)
+        )
+        rows = result.all()
+        comments = []
+        for comment, username, avatar_url in rows:
+            comments.append({
+                **comment.dict(),
+                "author_username": username,
+                "author_avatar_url": avatar_url
+            })
+        return comments
 
     async def get_replies(self, parent_id: UUID, session: AsyncSession):
-        result = await session.exec(select(Comment).where(Comment.parent_id==parent_id))
-        return result.all()
+        result = await session.exec(
+            select(Comment, User.username, User.avatar_url)
+            .join(User, Comment.author_id == User.id)
+            .where(Comment.parent_id == parent_id)
+        )
+        rows = result.all()
+        comments = []
+        for comment, username, avatar_url in rows:
+            comments.append({
+                **comment.dict(),
+                "author_username": username,
+                "author_avatar_url": avatar_url
+            })
+        return comments
 
     async def get_reply_count(self, parent_id: UUID, session: AsyncSession):
         result = await self.get_replies(parent_id)

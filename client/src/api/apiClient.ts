@@ -1,9 +1,10 @@
 import axios from "axios";
-import { authRoute, communityRoute, postRoute, userRoute, voteRoute } from "./routes";
+import { authRoute, communityRoute, postRoute, userRoute, voteRoute, commentRoute } from "./routes";
 import type { AuthResponse, LoginRequest, RegisterRequest, User } from "../types/user";
 import type { Community, CommunityMember, CommunityResponse } from "../types/community";
 import type { Post, PostResponse } from "../types/post";
 import type { VoteResponse, VoteValue } from "../types/vote";
+import type { Comment } from "../types/comment";
 
 const getConfig = () => {
     const token = localStorage.getItem("token");
@@ -143,3 +144,28 @@ export const voteOnComment = async (commentId: string, value: VoteValue): Promis
     const response = await axios.post(`${voteRoute}/comment/${commentId}/vote`, null, {...getConfig(),  params: { value } });
     return response.data;
 };
+
+export const getPostById = async (postId: string): Promise<PostResponse> => {
+    const res = await axios.get(`${postRoute}/${postId}`, getConfig());
+    return res.data;
+}
+
+export const getTopComments = async (postId: string): Promise<Comment[]> => {
+    const res = await axios.get(`${commentRoute}/post/${postId}`, getConfig());
+    return res.data;
+}
+
+export const getCommentReplies = async (commentId: string): Promise<Comment[]> => {
+    const res = await axios.get(`${commentRoute}/${commentId}/replies`, getConfig());
+    return res.data;
+}
+
+export const postComment = async (postId: string, body: string): Promise<Comment> => {
+    const res = await axios.post(`${commentRoute}/${postId}/comment`, null, { ...getConfig(), params: { body } });
+    return res.data;
+}
+
+export const postReply = async (postId: string, commentId: string, reply: string): Promise<Comment> => {
+    const res = await axios.post(`${commentRoute}/${postId}/comment/${commentId}/reply`, null, { ...getConfig(), params: { reply } });
+    return res.data;
+}

@@ -24,3 +24,7 @@ class CommentSchema(CommentBase):
     updated_at: datetime
     
     model_config = ConfigDict(from_attributes=True)
+
+class ExpandedCommentSchema(CommentSchema):
+    author_username: str
+    author_avatar_url: Optional[str] = None

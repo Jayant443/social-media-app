@@ -13,7 +13,7 @@ class Comment(SQLModel, table=True):
     post_id: UUID = Field(sa_column=Column(BinaryUUID, ForeignKey("posts.id")))
     parent_id: Optional[UUID] = Field(sa_column=Column(BinaryUUID, ForeignKey("comments.id"), nullable=True))
     body: str
-    vote_score: int = Field(default=0)
+    votes_score: int = Field(default=0)
     is_deleted: bool = Field(default=False)
     created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
     updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

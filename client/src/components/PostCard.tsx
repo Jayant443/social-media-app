@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import type { Post } from "../types/post";
 import { formatDate } from "../utils/formatDate";
 import { useVote } from "../hooks/useVote";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
     post: Post;
@@ -11,11 +12,16 @@ type Props = {
 
 function PostCard({ post }: Props) {
     const [open, setOpen] = useState(false);
+    const navigate = useNavigate();
     const { score, currentVote, vote, loading } = useVote({
         targetId: post.id,
         targetType: "post",
         initialScore: post.votes_score,
     });
+
+    const handlePostClick = () => {
+        navigate(`/r/${post.community_name}/comments/${post.id}`);
+    };
 
     return (
         <>
@@ -48,15 +54,19 @@ function PostCard({ post }: Props) {
                             • {formatDate(post.created_at.toString())}
                         </span>
                     </div>
-                    <h3 className="post-title">{post.title}</h3>
-                    <p className="post-body">{post.body}</p>
+                    <div className="post-clickable-area" onClick={handlePostClick} style={{ cursor: "pointer" }}>
+                        <h3 className="post-title">{post.title}</h3>
+                        <p className="post-body">{post.body}</p>
+                    </div>
                     <div className="post-actions">
                         <div className="vote-box">
                             <button onClick={() => vote(1)} disabled={loading} style={{ color: currentVote === 1 ? "orange" : "inherit", background: "none", border: "none", cursor: "pointer" }}><FiArrowUp /></button>
                             <span>{score}</span>
                             <button onClick={() => vote(-1)} disabled={loading} style={{ color: currentVote === -1 ? "blue" : "inherit", background: "none", border: "none", cursor: "pointer" }}><FiArrowDown /></button>
                         </div>
-                        <div className="action"><FiMessageSquare /><span>{post.comment_count} Comments</span></div>
+                        <div className="action" onClick={handlePostClick} style={{ cursor: "pointer" }}>
+                            <FiMessageSquare /><span>{post.comment_count} Comments</span>
+                        </div>
                         <div className="action"><FiShare /><span>Share</span></div>
                     </div>
                 </div>
