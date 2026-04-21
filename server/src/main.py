@@ -33,4 +33,4 @@ app.include_router(vote_router, prefix=f"/votes", tags=["votes"])
 
 @app.get("/")
 async def root():
-    return {"message": "Hello"}
+    return {"status": "ok"}
