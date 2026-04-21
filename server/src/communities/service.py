@@ -61,7 +61,7 @@ class CommunityService:
         return community_member
 
     async def leave_community(self, user_id: UUID, community_id: UUID, session: AsyncSession) -> bool:
-        result = await session.exec(select(CommunityMember).where(or_(CommunityMember.user_id == user_id, CommunityMember.community_id == community_id)))
+        result = await session.exec(select(CommunityMember).where(CommunityMember.user_id == user_id, CommunityMember.community_id == community_id))
         db_community_member = result.first()
         if not db_community_member:
             return False
@@ -74,5 +74,5 @@ class CommunityService:
         return list(result.all())
 
     async def get_community_posts(self, id: UUID, session: AsyncSession) -> List[Post]:
-        result = await session.exec(select(Post).where(Post.community_id == id))
+        result = await session.exec(select(Post).where(Post.community_id == id, Post.is_deleted == False))
         return list(result.all())

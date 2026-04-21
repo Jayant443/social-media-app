@@ -62,7 +62,7 @@ class UserService:
         return result.all()
 
     async def get_user_comments(self, id: UUID, session: AsyncSession) -> List[Comment]:
-        result = await session.exec(select(Comment).where(Comment.author_id == id))
+        result = await session.exec(select(Comment).where(Comment.author_id == id, Comment.is_deleted == False))
         return result.all()
 
     async def get_user_saved_posts(self, id: UUID, session: AsyncSession) -> List[Post]:

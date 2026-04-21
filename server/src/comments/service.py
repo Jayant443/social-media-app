@@ -36,7 +36,7 @@ class CommentService:
         result = await session.exec(
             select(Comment, User.username, User.avatar_url)
             .join(User, Comment.author_id == User.id)
-            .where(Comment.post_id == post_id, Comment.parent_id == None)
+            .where(Comment.post_id == post_id, Comment.parent_id == None, Comment.is_deleted == False)
         )
         rows = result.all()
         comments = []
@@ -52,7 +52,7 @@ class CommentService:
         result = await session.exec(
             select(Comment, User.username, User.avatar_url)
             .join(User, Comment.author_id == User.id)
-            .where(Comment.parent_id == parent_id)
+            .where(Comment.parent_id == parent_id, Comment.is_deleted == False)
         )
         rows = result.all()
         comments = []
@@ -82,9 +82,10 @@ class CommentService:
         await session.refresh(comment)
         return comment
 
-    async def delete_comment(self, comment_id: UUID, session: AsyncSession) -> bool:
-        comment: Comment = await CommentService.get_comment(session, comment_id)
-        if not comment:
+    async def delete_comment(self, comment_id: UUID, user_id: UUID, session: AsyncSession) -> bool:
+        result = await session.exec(select(Comment).where(Comment.id == comment_id))
+        comment = result.first()
+        if not comment or comment.author_id != user_id:
             return False
         comment.is_deleted = True
         session.add(comment)

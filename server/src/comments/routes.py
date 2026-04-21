@@ -42,7 +42,10 @@ async def update_comment(comment_id: UUID, comment: CommentUpdate, session: Asyn
 
 @comment_router.delete("/{comment_id}", response_model=bool)
 async def delete_comment(comment_id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
-    return await comment_service.delete_comment(comment_id, session)
+    success = await comment_service.delete_comment(comment_id, current_user.id, session)
+    if not success:
+        raise HTTPException(status_code=403, detail="Could not delete comment")
+    return success
 
 @comment_router.get("/user/{user_id}", response_model=list[CommentSchema])
 async def get_comments_by_user(user_id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):

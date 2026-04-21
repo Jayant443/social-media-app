@@ -188,4 +188,15 @@ export const getSavedPostIds = async (): Promise<string[]> => {
 export const getSavedPosts = async (): Promise<Post[]> => {
     const res = await axios.get(`${postRoute}/saved_posts`, getConfig());
     return res.data;
-}
+}
+
+export const deletePost = async (postId: string): Promise<any> => {
+    const res = await axios.delete(`${postRoute}/${postId}`, getConfig());
+    return res.data;
+}
+
+export const deleteComment = async (commentId: string): Promise<any> => {
+    const res = await axios.delete(`${commentRoute}/${commentId}`, getConfig());
+    return res.data;
+}
+

@@ -1,10 +1,11 @@
-import { useState, useEffect } from "react";
-import { FiArrowUp, FiArrowDown, FiMessageSquare } from "react-icons/fi";
+import { FiArrowUp, FiArrowDown, FiMessageSquare, FiMoreHorizontal, FiTrash2 } from "react-icons/fi";
 import type { Comment } from "../types/comment";
-import { Link } from "react-router-dom";
+import { Link, useOutletContext } from "react-router-dom";
 import { useVote } from "../hooks/useVote";
-import { getCommentReplies, postReply } from "../api/apiClient";
+import { getCommentReplies, postReply, deleteComment } from "../api/apiClient";
 import { formatDate } from "../utils/formatDate";
+import type { LayoutContext } from "../App";
+import { useState, useEffect } from "react";
 
 type Props = {
     comment: Comment;
@@ -16,6 +17,10 @@ function CommentCard({ comment }: Props) {
     const [replyText, setReplyText] = useState("");
     const [localReplies, setLocalReplies] = useState<Comment[]>(comment.replies || []);
     const [hasFetchedReplies, setHasFetchedReplies] = useState(!!comment.replies && comment.replies.length > 0);
+
+    const [showOptions, setShowOptions] = useState(false);
+    const { currentUser } = useOutletContext<LayoutContext>();
+    const isAuthor = currentUser?.id === comment.author_id;
 
     const { score, currentVote, vote, loading } = useVote({
         targetId: comment.id,
@@ -59,8 +64,19 @@ function CommentCard({ comment }: Props) {
             setReplyText("");
             setShowReplyBox(false);
             setCollapsed(false);
+            setCollapsed(false);
         } catch (err) {
             console.error("Failed to post reply", err);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!window.confirm("Are you sure you want to delete this comment?")) return;
+        try {
+            await deleteComment(comment.id);
+            window.location.reload();
+        } catch (err) {
+            console.error("Failed to delete comment", err);
         }
     };
 
@@ -96,6 +112,22 @@ function CommentCard({ comment }: Props) {
                         <button className="action-btn" onClick={() => setShowReplyBox(!showReplyBox)}>
                             <FiMessageSquare /> Reply
                         </button>
+                        <div className="comment-more-options">
+                            <button className="action-btn" onClick={() => setShowOptions(!showOptions)}>
+                                <FiMoreHorizontal />
+                            </button>
+                            {showOptions && (
+                                <div className="options-menu comment-menu">
+                                    {isAuthor && (
+                                        <div className="option-item danger" onClick={handleDelete}>
+                                            <FiTrash2 />
+                                            <span>Delete</span>
+                                        </div>
+                                    )}
+                                    <div className="option-item"><span>Report</span></div>
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     {showReplyBox && (

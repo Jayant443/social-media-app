@@ -54,7 +54,10 @@ async def edit_post(id: UUID, post: UpdatePostSchema, session: AsyncSession = De
 
 @post_router.delete("/{id}", response_model=PostSchema)
 async def delete_post(id: UUID, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):
-    return await post_service.delete_post(id, session)
+    result = await post_service.delete_post(id, current_user.id, session)
+    if not result:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Could not delete post")
+    return result
 
 @post_router.post("/save", response_model=SavedPostSchema)
 async def save_post(post: SavePostSchema, session: AsyncSession = Depends(get_session), current_user: User = Depends(get_current_user)):

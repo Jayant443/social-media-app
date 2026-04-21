@@ -1,11 +1,11 @@
-import { FiArrowUp, FiArrowDown, FiMessageSquare, FiShare, FiMoreHorizontal, FiBookmark, FiEyeOff, FiFlag } from "react-icons/fi";
+import { FiArrowUp, FiArrowDown, FiMessageSquare, FiShare, FiMoreHorizontal, FiBookmark, FiEyeOff, FiFlag, FiTrash2 } from "react-icons/fi";
 import { useState } from "react";
 import { Link, useOutletContext } from "react-router-dom";
 import type { Post } from "../types/post";
 import { formatDate } from "../utils/formatDate";
 import { useVote } from "../hooks/useVote";
 import { useNavigate } from "react-router-dom";
-import { savePost, unsavePost } from "../api/apiClient";
+import { savePost, unsavePost, deletePost } from "../api/apiClient";
 import type { LayoutContext } from "../App";
 
 type Props = {
@@ -15,8 +15,9 @@ type Props = {
 function PostCard({ post }: Props) {
     const [open, setOpen] = useState(false);
     const navigate = useNavigate();
-    const { savedPostIds, setSavedPostIds } = useOutletContext<LayoutContext>();
+    const { currentUser, savedPostIds, setSavedPostIds } = useOutletContext<LayoutContext>();
     const isSaved = savedPostIds.has(post.id);
+    const isAuthor = currentUser?.id === post.author_id;
 
     const { score, currentVote, vote, loading } = useVote({
         targetId: post.id,
@@ -48,6 +49,17 @@ function PostCard({ post }: Props) {
         }
     };
 
+    const handleDelete = async (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!window.confirm("Are you sure you want to delete this post?")) return;
+        try {
+            await deletePost(post.id);
+            window.location.reload(); // Simple way to refresh the feed
+        } catch (err) {
+            console.error("Failed to delete post", err);
+        }
+    };
+
     return (
         <>
             <div className="post-card" >
@@ -60,6 +72,12 @@ function PostCard({ post }: Props) {
                                     <FiBookmark style={{ fill: isSaved ? "black" : "none" }} />
                                     <span>{isSaved ? "Unsave" : "Save"}</span>
                                 </div>
+                                {isAuthor && (
+                                    <div className="option-item danger" onClick={handleDelete}>
+                                        <FiTrash2 />
+                                        <span>Delete</span>
+                                    </div>
+                                )}
                                 <div className="option-item"><FiEyeOff /><span>Hide</span></div>
                                 <div className="option-item danger"><FiFlag /><span>Report</span></div>
                             </div>

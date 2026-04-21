@@ -38,7 +38,7 @@ class PostService:
         }
     
     async def get_recent_posts(self, session: AsyncSession):
-        result = await session.exec(select(Post, User.username, User.avatar_url, Community.name).join(User, Post.author_id == User.id).join(Community, Post.community_id == Community.id).order_by(Post.created_at.desc()))
+        result = await session.exec(select(Post, User.username, User.avatar_url, Community.name).join(User, Post.author_id == User.id).join(Community, Post.community_id == Community.id).where(Post.is_deleted == False).order_by(Post.created_at.desc()))
         rows = result.all()
         posts = []
         for post, username, avatar_url, community_name in rows:
@@ -61,9 +61,9 @@ class PostService:
         await session.refresh(db_post)
         return db_post
 
-    async def delete_post(self, id: UUID, session: AsyncSession) -> Optional[Post]:
+    async def delete_post(self, id: UUID, user_id: UUID, session: AsyncSession) -> Optional[Post]:
         db_post = await session.get(Post, id)
-        if not db_post:
+        if not db_post or db_post.author_id != user_id:
             return None
         db_post.is_deleted = True
         session.add(db_post)
@@ -98,7 +98,7 @@ class PostService:
         return result.all()
 
     async def get_saved_posts(self, user_id: UUID, session: AsyncSession):
-        result = await session.exec(select(Post, User.username, User.avatar_url, Community.name).join(SavedPost, SavedPost.post_id == Post.id).join(User, Post.author_id == User.id).join(Community, Post.community_id == Community.id).where(SavedPost.user_id == user_id).order_by(SavedPost.saved_at.desc()))
+        result = await session.exec(select(Post, User.username, User.avatar_url, Community.name).join(SavedPost, SavedPost.post_id == Post.id).join(User, Post.author_id == User.id).join(Community, Post.community_id == Community.id).where(SavedPost.user_id == user_id, Post.is_deleted == False).order_by(SavedPost.saved_at.desc()))
         rows = result.all()
         posts = []
         for post, username, avatar_url, community_name in rows:

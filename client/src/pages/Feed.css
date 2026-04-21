@@ -1153,6 +1153,19 @@ select option {
     color: #1a1a1b;
 }
 
+.comment-more-options {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.comment-menu {
+    top: 30px;
+    left: 0;
+    right: auto;
+    width: 120px;
+}
+
 .comment-replies-container {
     display: flex;
     flex-direction: column;
