@@ -7,6 +7,7 @@ import type { Post, PostResponse } from "../types/post";
 import { getUserByUsername, getUserPosts, getCommunityById } from "../api/apiClient";
 import { formatDate } from "../utils/formatDate";
 import PostCard from "../components/PostCard";
+import EditProfile from "../components/EditProfile";
 import type { LayoutContext } from "../App";
 
 function UserProfile() {
@@ -15,6 +16,9 @@ function UserProfile() {
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     const [loading, setLoading] = useState(true);
+    const [showEdit, setShowEdit] = useState(false);
+    const [redditAge, setRedditAge] = useState(0);
+    const [totalVotes, setTotalVotes] = useState(0);
     const isOwnProfile = currentUser?.username === username;
 
     useEffect(() => {
@@ -25,10 +29,16 @@ function UserProfile() {
             try {
                 const userData = await getUserByUsername(username);
                 if (!isActive) return;
+                const created = new Date(userData.created_at);
+                const now = new Date();
+                const months = (now.getFullYear() - created.getFullYear()) * 12 + (now.getMonth() - created.getMonth());
+                setRedditAge(months < 0 ? 0 : months);
                 userData.created_at = formatDate(userData.created_at);
                 setUser(userData);
                 try {
                     const userPosts: PostResponse[] = await getUserPosts(userData.id);
+                    const totalVotes = userPosts.reduce((sum, post) => sum + post.votes_score, 0);
+                    setTotalVotes(totalVotes);
                     const uniqueCommunityIds = [...new Set(userPosts.map(p => p.community_id))];
                     const communityMap = new Map<string, string>();
                     await Promise.all(uniqueCommunityIds.map(async (cid) => {
@@ -42,6 +52,7 @@ function UserProfile() {
                     const fullPosts: Post[] = userPosts.map((post) => ({
                         ...post,
                         author_username: userData.username,
+                        author_avatar_url: userData.avatar_url,
                         community_name: communityMap.get(post.community_id) || ""
                     }));
                     if (isActive) setPosts(fullPosts);
@@ -71,12 +82,10 @@ function UserProfile() {
                         </div>
                         <div className="profile-meta">
                             <h2>{user.username}</h2>
-                            <p className="email">{user.email}</p>
                             {user.bio && <p className="bio">{user.bio}</p>}
-                            <p className="joined">Joined {user.created_at}</p>
                         </div>
                         {isOwnProfile && (
-                            <button className="edit-profile-btn"><FiEdit /> Edit</button>
+                            <button className="edit-profile-btn" onClick={() => setShowEdit(true)}><FiEdit /> Edit</button>
                         )}
                     </div>
                 </div>
@@ -84,6 +93,14 @@ function UserProfile() {
                     <div>
                         <strong>{posts.length}</strong>
                         <span>Posts</span>
+                    </div>
+                    <div>
+                        <strong>{totalVotes}</strong>
+                        <span>Votes</span>
+                    </div>
+                    <div>
+                        <strong>{redditAge}m</strong>
+                        <span>Super Reddit Age</span>
                     </div>
                 </div>
                 <div className="profile-posts">
@@ -95,6 +112,16 @@ function UserProfile() {
                     )}
                 </div>
             </div>
+            {showEdit && user && (
+                <EditProfile
+                    user={user}
+                    onClose={() => setShowEdit(false)}
+                    onSave={(updatedUser) => {
+                        updatedUser.created_at = formatDate(updatedUser.created_at);
+                        setUser(updatedUser);
+                    }}
+                />
+            )}
         </>
     );
 }

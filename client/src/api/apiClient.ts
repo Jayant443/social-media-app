@@ -54,6 +54,11 @@ export const getUserJoinedCommunities = async (): Promise<Community[]> => {
     return res.data;
 }
 
+export const updateUser = async (formData: FormData): Promise<User> => {
+    const res = await axios.patch(`${userRoute}/update`, formData, getConfig());
+    return res.data;
+}
+
 export const getRandomCommunities = async (): Promise<Community[]> => {
     const res = await axios.get(`${communityRoute}/discover/random`, getConfig());
     return res.data;

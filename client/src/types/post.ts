@@ -16,6 +16,7 @@ export interface PostResponse {
 
 export interface Post extends PostResponse {
     author_username: string,
+    author_avatar_url: string | null,
     community_name: string
 }
 

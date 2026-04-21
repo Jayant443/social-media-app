@@ -52,7 +52,7 @@ async def update_user(username: str = Form(None), avatar: Optional[UploadFile] =
         update_data["username"] = username
     if avatar:
         avatar_url = await upload_to_cloudinary(await avatar.read())
-        update_data["avatar-url"] = avatar_url
+        update_data["avatar_url"] = avatar_url
     if bio:
         update_data["bio"] = bio
     user = UpdateUserSchema(**update_data)

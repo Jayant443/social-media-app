@@ -32,6 +32,7 @@ class PostSchema(PostBase):
 
 class RecentPostsSchema(PostSchema):
     author_username: str
+    author_avatar_url: Optional[str] = None
     community_name: str
     model_config=ConfigDict(from_attributes=True)
 

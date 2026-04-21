@@ -70,6 +70,7 @@ function CommunityPage() {
                         return {
                             ...post,
                             author_username: user.username,
+                            author_avatar_url: user.avatar_url,
                             community_name: community?.name || ""
                         };
                     })

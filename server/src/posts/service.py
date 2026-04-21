@@ -24,13 +24,14 @@ class PostService:
         return result.first()
     
     async def get_recent_posts(self, session: AsyncSession):
-        result = await session.exec(select(Post, User.username, Community.name).join(User, Post.author_id == User.id).join(Community, Post.community_id == Community.id).order_by(Post.created_at.desc()))
+        result = await session.exec(select(Post, User.username, User.avatar_url, Community.name).join(User, Post.author_id == User.id).join(Community, Post.community_id == Community.id).order_by(Post.created_at.desc()))
         rows = result.all()
         posts = []
-        for post, username, community_name in rows:
+        for post, username, avatar_url, community_name in rows:
             posts.append({
                 **post.dict(),
                 "author_username": username,
+                "author_avatar_url": avatar_url,
                 "community_name": community_name
             })
         return posts
