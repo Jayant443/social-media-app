@@ -64,6 +64,11 @@ export const getCommunityMemberCount = async (communityId: string | null): Promi
     return res.data;
 }
 
+export const getCommunityById = async (communityId: string): Promise<CommunityResponse> => {
+    const res = await axios.get(`${communityRoute}/${communityId}`, getConfig());
+    return res.data;
+}
+
 export const getCommunityPostCount = async (communityId: string | null): Promise<number> => {
     const res = await axios.get<number>(`${communityRoute}/${communityId}/posts/count`, getConfig());
     return res.data;
@@ -91,6 +96,16 @@ export const getUserById = async (id: string): Promise<User> => {
 
 export const getRecentPosts = async (): Promise<Post[]> => {
     const res = await axios.get(`${postRoute}/recent`, getConfig());
+    return res.data;
+};
+
+export const getUserByUsername = async (username: string): Promise<User> => {
+    const res = await axios.get(`${userRoute}/${username}`, getConfig());
+    return res.data;
+};
+
+export const getUserPosts = async (userId: string): Promise<PostResponse[]> => {
+    const res = await axios.get(`${userRoute}/${userId}/posts`, getConfig());
     return res.data;
 };
 

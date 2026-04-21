@@ -32,7 +32,7 @@ function PostCard({ post }: Props) {
                 </div>
                 <div className="post-meta">
                     <Link to={`/r/${post.community_name}`} className="subreddit clickable" style={{ textDecoration: 'none', color: '#333' }}>r/{post.community_name}</Link>
-                    <span> Posted by u/{post.author_username} • {formatDate(post.created_at.toString())}</span>
+                    <span> Posted by <Link to={`/user/${post.author_username}`} className="clickable" style={{ textDecoration: 'none', color: '#888' }}>u/{post.author_username}</Link> • {formatDate(post.created_at.toString())}</span>
                 </div>
                 <h3 className="post-title">{post.title}</h3>
                 <p className="post-body">{post.body}</p>

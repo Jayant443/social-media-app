@@ -37,7 +37,7 @@ function Navbar({ currentUser }: { currentUser: User | null }) {
                             )}
                         </div>
                         <button className="icon-btn"><FiBell size={24} /></button>
-                        <div className="user-profile">
+                        <div className="user-profile" onClick={() => currentUser && navigate(`/user/${currentUser.username}`)}>
                             {currentUser?.avatar_url ? (
                                 <img src={currentUser.avatar_url} alt="avatar" className='avatar'/>
                             ) : (

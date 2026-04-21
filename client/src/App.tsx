@@ -5,6 +5,7 @@ import Signup from './pages/Signup';
 import CommunityPage from './pages/CommunityPage';
 import CreatePost from './pages/CreatePost';
 import CreateCommunity from './pages/CreateCommunity';
+import UserProfile from './pages/UserProfile';
 import { Routes, Route, Outlet } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
@@ -71,6 +72,7 @@ function App() {
                         <Route path='/submit' element={<CreatePost />} />
                         <Route path='/r/create' element={<CreateCommunity />} />
                         <Route path='/r/:communityName' element={<CommunityPage />} />
+                        <Route path='/user/:username' element={<UserProfile />} />
                     </Route>
                 </Route>
             </Routes>
