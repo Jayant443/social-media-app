@@ -25,7 +25,7 @@ function SavedPosts() {
 
     return (
         <div className="feed-posts">
-            <h2 style={{ alignSelf: 'flex-start', marginBottom: '20px', fontSize: '18px' }}>Saved Posts</h2>
+            <h2>Saved Posts</h2>
             {posts.length === 0 ? (
                 <div className="card" style={{ width: '100%', textAlign: 'center', padding: '40px' }}>
                     <p>You haven't saved any posts yet.</p>

@@ -271,6 +271,12 @@
     padding: 0 40px;
 }
 
+.feed-posts h2 {
+    font-size: 18px;
+    margin-bottom: 16px;
+    align-self: flex-start;
+}
+
 .back-btn {
     position: fixed;
     top: 80px;
@@ -785,7 +791,7 @@ select option {
     width: 25%;
     flex-shrink: 0;
     position: sticky;
-    top: 20px;
+    top: 1px;
 }
 
 .card {
