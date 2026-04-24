@@ -21,8 +21,6 @@ function PostPage() {
             setLoading(true);
             try {
                 const fetchedPost = await getPostById(postId);
-                
-                // Ensure community name is present because getPostById might only return community_id
                 let resolvedCommunityName = fetchedPost.community_name;
                 if (!resolvedCommunityName && fetchedPost.community_id) {
                     if (communityName) {
@@ -32,16 +30,13 @@ function PostPage() {
                         resolvedCommunityName = community.name;
                     }
                 }
-
                 if (!isActive) return;
-                
                 setPost({
                     ...fetchedPost,
                     community_name: resolvedCommunityName || "",
                 });
-
                 const topComments = await getTopComments(postId);
-                const formattedComments = topComments.map(c => ({...c, created_at: formatDate(c.created_at)}));
+                const formattedComments = topComments.map(c => ({ ...c, created_at: formatDate(c.created_at) }));
                 if (isActive) {
                     setComments(formattedComments);
                 }
@@ -60,7 +55,6 @@ function PostPage() {
         try {
             const newComment = await postComment(postId, topLevelReplyText);
             newComment.created_at = formatDate(newComment.created_at);
-            // new comments usually have no replies
             newComment.replies = [];
             setComments([newComment, ...comments]);
             setTopLevelReplyText("");
@@ -68,39 +62,22 @@ function PostPage() {
             console.error("Failed to post comment:", err);
         }
     };
-
     if (loading) return <div className="card">Loading post...</div>;
     if (!post) return <div className="card">Post not found.</div>;
 
     return (
         <div className="post-page">
-            {/* Main Post Section */}
-            <div className="post-container mb-4">
-                <PostCard post={post} />
-            </div>
-
-            {/* Comments Section */}
+            <div className="post-container mb-4"><PostCard post={post} /></div>
             <div className="comments-section card">
                 <h3>Comments</h3>
-                
-                {/* Top-level comment input box */}
                 <div className="top-level-reply-box">
-                    <textarea 
-                        className="reply-textarea" 
-                        placeholder="Add a comment..." 
-                        rows={3} 
-                        value={topLevelReplyText}
-                        onChange={(e) => setTopLevelReplyText(e.target.value)}
-                    />
+                    <textarea className="reply-textarea" placeholder="Add a comment..." rows={3} value={topLevelReplyText} onChange={(e) => setTopLevelReplyText(e.target.value)} />
                     <div className="reply-actions mt-2" style={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <button className="post-btn" onClick={handleTopLevelSubmit} disabled={!topLevelReplyText.trim()}>Comment</button>
                     </div>
                 </div>
-
                 <div className="comments-tree">
-                    {comments.map(comment => (
-                        <CommentCard key={comment.id} comment={comment} />
-                    ))}
+                    {comments.map(comment => (<CommentCard key={comment.id} comment={comment} />))}
                 </div>
             </div>
         </div>

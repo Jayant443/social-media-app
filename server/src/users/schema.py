@@ -1,7 +1,9 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
-from typing import Optional
+from pydantic import BaseModel, ConfigDict, EmailStr
+from typing import Optional, List
 from uuid import UUID
 from datetime import datetime
+from src.posts.schema import PostSchema
+from src.communities.schema import CommunitySchema
 
 class UserBase(BaseModel):
     username: str
@@ -28,3 +30,8 @@ class UserSchema(UserBase):
     created_at: datetime
     updated_at: datetime
     model_config=ConfigDict(from_attributes=True)
+
+class SearchResponse(BaseModel):
+    users: List[UserSchema]
+    posts: List[PostSchema]
+    communities: List[CommunitySchema]

@@ -30,9 +30,7 @@ function SavedPosts() {
                 <div className="card" style={{ width: '100%', textAlign: 'center', padding: '40px' }}>
                     <p>You haven't saved any posts yet.</p>
                 </div>
-            ) : (
-                posts.map(post => <PostCard key={post.id} post={post} />)
-            )}
+            ) : (posts.map(post => <PostCard key={post.id} post={post} />))}
         </div>
     );
 }

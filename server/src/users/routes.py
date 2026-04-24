@@ -3,7 +3,7 @@ from sqlmodel.ext.asyncio.session import AsyncSession
 from src.core.database import get_session
 from src.users.model import User
 from src.dependencies.auth import get_current_user
-from src.users.schema import CreateUserSchema, UpdateUserSchema, UserSchema
+from src.users.schema import CreateUserSchema, UpdateUserSchema, UserSchema, SearchResponse
 from src.posts.schema import PostSchema
 from src.comments.schema import CommentSchema
 from src.communities.schema import CommunitySchema
@@ -67,12 +67,14 @@ async def delete_user(current_user: User = Depends(get_current_user), session: A
     if not result:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-@user_router.get("/{username}", response_model=UserSchema)
-async def get_user_by_username(username: str, session: AsyncSession = Depends(get_session)):
-    user = await user_service.get_user(username, session)
-    if not user:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
-    return user
+@user_router.get("/search", response_model=SearchResponse)
+async def search(query: str, session: AsyncSession = Depends(get_session)):
+    if not query.strip():
+        return {"users": [], "posts": [], "communities": []}
+    users = await user_service.get_user_search_results(query, session)
+    posts = await user_service.get_post_search_results(query, session)
+    communities = await user_service.get_community_search_results(query, session)
+    return {"users": users, "posts": posts, "communities": communities}
 
 @user_router.get("/{id}/get", response_model=UserSchema)
 async def get_user_by_id(id: UUID, session: AsyncSession = Depends(get_session)):
@@ -101,3 +103,10 @@ async def get_communities_by_user_id(user_id: UUID, session: AsyncSession = Depe
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return await user_service.get_user_communities(user_id, session)
+
+@user_router.get("/{username}", response_model=UserSchema)
+async def get_user_by_username(username: str, session: AsyncSession = Depends(get_session)):
+    user = await user_service.get_user(username, session)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    return user

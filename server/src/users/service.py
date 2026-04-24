@@ -76,3 +76,31 @@ class UserService:
     async def get_user_created_communities(self, id: UUID, session: AsyncSession) -> List[Community]:
         result = await session.exec(select(Community).where(Community.created_by == id))
         return result.all()
+
+    async def get_user_search_results(self, query: str, session: AsyncSession) -> List[User]:
+        result = await session.exec(select(User).where(User.username.contains(query.strip())))
+        return result.all()
+
+    async def get_post_search_results(self, query: str, session: AsyncSession) -> List[dict]:
+        result = await session.exec(
+            select(Post, User.username, User.avatar_url, Community.name)
+            .join(User, Post.author_id == User.id)
+            .join(Community, Post.community_id == Community.id)
+            .where(Post.title.contains(query.strip()))
+            .where(Post.is_deleted == False)
+        )
+        rows = result.all()
+        posts = []
+        for post, username, avatar_url, community_name in rows:
+            posts.append({
+                **post.dict(),
+                "author_username": username,
+                "author_avatar_url": avatar_url,
+                "community_name": community_name
+            })
+        return posts
+    
+    async def get_community_search_results(self, query: str, session: AsyncSession) -> List[Community]:
+        result = await session.exec(select(Community).where(Community.name.contains(query.strip())))
+        return result.all()
+

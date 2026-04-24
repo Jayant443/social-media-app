@@ -20,11 +20,7 @@ function Feed() {
     }, []);
 
     return (
-        <div className="feed-posts">
-            {posts.map(post => (
-                <PostCard key={post.id} post={post} />
-            ))}
-        </div>
+        <div className="feed-posts">{posts.map(post => (<PostCard key={post.id} post={post} />))}</div>
     );
 }
 

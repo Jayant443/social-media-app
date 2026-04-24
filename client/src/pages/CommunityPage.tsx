@@ -124,14 +124,8 @@ function CommunityPage() {
             setJoinLoading(false);
         }
     };
-
-    if (loading) {
-        return <div className="community-page"><p>Loading...</p></div>;
-    }
-
-    if (!community) {
-        return <div className="community-page"><p>Community not found.</p></div>;
-    }
+    if (loading) return <div className="community-page"><p>Loading...</p></div>;
+    if (!community) return <div className="community-page"><p>Community not found.</p></div>;
 
     return (
         <div className="community-page">
@@ -163,9 +157,7 @@ function CommunityPage() {
                 <h3>About Community</h3>
                 <p>{community?.description}</p>
             </div>
-            <div className="community-posts">
-                {communityPosts.map(post => (<PostCard key={post.id} post={post} />))}
-            </div>
+            <div className="community-posts">{communityPosts.map(post => (<PostCard key={post.id} post={post} />))}</div>
         </div>
     );
 }

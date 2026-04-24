@@ -1,12 +1,33 @@
-import { FiUser, FiBell, FiPlus, FiSearch } from 'react-icons/fi';
+import { FiUser, FiBell, FiPlus, FiSearch, FiUsers, FiFileText, FiX } from 'react-icons/fi';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { User } from '../types/user';
+import { search } from '../api/apiClient';
+import type { Community } from '../types/community';
+import type { Post } from '../types/post';
 
 function Navbar({ currentUser }: { currentUser: User | null }) {
     const [open, setOpen] = useState(false);
     const dropdownRef = useRef<HTMLDivElement>(null);
     const navigate = useNavigate();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchResults, setSearchResults] = useState<{ users: User[], posts: Post[], communities: Community[] }>({ users: [], posts: [], communities: [] });
+
+    function handleSearchChange(e: React.ChangeEvent<HTMLInputElement>) {
+        setSearchQuery(e.target.value);
+    }
+    const handleSearch = async () => {
+        if (searchQuery.trim()) {
+            const res = await search(searchQuery);
+            setSearchResults(res);
+        } else {
+            setSearchResults({ users: [], posts: [], communities: [] });
+        }
+    }
+    const clearSearch = () => {
+        setSearchQuery('');
+        setSearchResults({ users: [], posts: [], communities: [] });
+    }
 
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) { if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) { setOpen(false); } }
@@ -24,7 +45,22 @@ function Navbar({ currentUser }: { currentUser: User | null }) {
                     </div>
                     <div className="search-container">
                         <FiSearch className='search-icon' size={24} />
-                        <input type="text" placeholder="Search posts, communities..." />
+                        <input type="text" placeholder="Search posts, communities..." value={searchQuery} onChange={handleSearchChange} onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }} />
+                        {searchQuery && <FiX className='clear-icon' onClick={clearSearch} />}
+
+                        {(searchResults.posts.length > 0 || searchResults.communities.length > 0 || searchResults.users.length > 0) && (
+                            <div className="search-results-dropdown">
+                                {searchResults.communities.map(c => (
+                                    <div key={c.id} className="search-result-item" onClick={() => { navigate(`/r/${c.name}`); clearSearch(); }}><FiUsers /> <span>r/{c.name}</span></div>
+                                ))}
+                                {searchResults.users.map(u => (
+                                    <div key={u.id} className="search-result-item" onClick={() => { navigate(`/user/${u.username}`); clearSearch(); }}><FiUser /> <span>u/{u.username}</span></div>
+                                ))}
+                                {searchResults.posts.map(p => (
+                                    <div key={p.id} className="search-result-item" onClick={() => { navigate(`/r/${p.community_name}/comments/${p.id}`); clearSearch(); }}><FiFileText /> <span>{p.title}</span></div>
+                                ))}
+                            </div>
+                        )}
                     </div>
                     <div className="nav-actions">
                         <div className="plus-dropdown" ref={dropdownRef}>
@@ -38,11 +74,7 @@ function Navbar({ currentUser }: { currentUser: User | null }) {
                         </div>
                         <button className="icon-btn"><FiBell size={24} /></button>
                         <div className="user-profile" onClick={() => currentUser && navigate(`/user/${currentUser.username}`)}>
-                            {currentUser?.avatar_url ? (
-                                <img src={currentUser.avatar_url} alt="avatar" className='avatar'/>
-                            ) : (
-                                <FiUser size={20} />
-                            )}
+                            {currentUser?.avatar_url ? (<img src={currentUser.avatar_url} alt="avatar" className='avatar' />) : (<FiUser size={20} />)}
                             <span>{currentUser?.username}</span>
                         </div>
                     </div>

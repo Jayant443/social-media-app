@@ -54,7 +54,7 @@ function PostCard({ post }: Props) {
         if (!window.confirm("Are you sure you want to delete this post?")) return;
         try {
             await deletePost(post.id);
-            window.location.reload(); // Simple way to refresh the feed
+            window.location.reload();
         } catch (err) {
             console.error("Failed to delete post", err);
         }

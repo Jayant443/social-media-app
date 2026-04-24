@@ -136,12 +136,12 @@ export const leaveCommunity = async (communityId: string): Promise<boolean> => {
 }
 
 export const voteOnPost = async (postId: string, value: VoteValue): Promise<VoteResponse> => {
-    const response = await axios.post(`${voteRoute}/post/${postId}/vote`, null, {...getConfig(), params: { value } }, );
+    const response = await axios.post(`${voteRoute}/post/${postId}/vote`, null, { ...getConfig(), params: { value } },);
     return response.data;
 };
 
 export const voteOnComment = async (commentId: string, value: VoteValue): Promise<VoteResponse> => {
-    const response = await axios.post(`${voteRoute}/comment/${commentId}/vote`, null, {...getConfig(),  params: { value } });
+    const response = await axios.post(`${voteRoute}/comment/${commentId}/vote`, null, { ...getConfig(), params: { value } });
     return response.data;
 };
 
@@ -190,13 +190,17 @@ export const getSavedPosts = async (): Promise<Post[]> => {
     return res.data;
 }
 
-export const deletePost = async (postId: string): Promise<any> => {
+export const deletePost = async (postId: string): Promise<PostResponse> => {
     const res = await axios.delete(`${postRoute}/${postId}`, getConfig());
     return res.data;
 }
 
-export const deleteComment = async (commentId: string): Promise<any> => {
+export const deleteComment = async (commentId: string): Promise<boolean> => {
     const res = await axios.delete(`${commentRoute}/${commentId}`, getConfig());
     return res.data;
 }
-
+
+export const search = async (query: string): Promise<{ users: User[], posts: Post[], communities: Community[] }> => {
+    const res = await axios.get(`${userRoute}/search`, { params: { query } });
+    return res.data;
+} 

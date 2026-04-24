@@ -105,22 +105,11 @@ function UserProfile() {
                 </div>
                 <div className="profile-posts">
                     <h3>Posts</h3>
-                    {posts.length > 0 ? (
-                        posts.map(post => (<PostCard key={post.id} post={post} />))
-                    ) : (
-                        <div className="empty-state card">No posts yet.</div>
-                    )}
+                    {posts.length > 0 ? (posts.map(post => (<PostCard key={post.id} post={post} />))) : (<div className="empty-state card">No posts yet.</div>)}
                 </div>
             </div>
             {showEdit && user && (
-                <EditProfile
-                    user={user}
-                    onClose={() => setShowEdit(false)}
-                    onSave={(updatedUser) => {
-                        updatedUser.created_at = formatDate(updatedUser.created_at);
-                        setUser(updatedUser);
-                    }}
-                />
+                <EditProfile user={user} onClose={() => setShowEdit(false)} onSave={(updatedUser) => { updatedUser.created_at = formatDate(updatedUser.created_at); setUser(updatedUser); }} />
             )}
         </>
     );
