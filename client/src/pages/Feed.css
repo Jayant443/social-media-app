@@ -17,7 +17,7 @@
 .nav-content {
     width: 100%;
     margin: 0 auto;
-    padding: 12px 20px;
+    padding: 12px 30px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -153,6 +153,27 @@
 
 .icon-btn:hover {
     background-color: #ececec;
+}
+
+.logout-btn {
+    background-color: #f3f5f9;
+    border: none;
+    width: 40px;
+    height: 40px;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: #e03131;
+}
+
+.logout-btn:hover {
+    background-color: #ffe3e3;
+    color: #c92a2a;
 }
 
 .plus-dropdown {

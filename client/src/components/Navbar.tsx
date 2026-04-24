@@ -1,4 +1,4 @@
-import { FiUser, FiBell, FiPlus, FiSearch, FiUsers, FiFileText, FiX } from 'react-icons/fi';
+import { FiUser, FiBell, FiPlus, FiSearch, FiUsers, FiFileText, FiX, FiLogOut } from 'react-icons/fi';
 import { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { User } from '../types/user';
@@ -28,6 +28,11 @@ function Navbar({ currentUser }: { currentUser: User | null }) {
         setSearchQuery('');
         setSearchResults({ users: [], posts: [], communities: [] });
     }
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
+    };
 
     useEffect(() => {
         function handleClickOutside(e: MouseEvent) { if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) { setOpen(false); } }
@@ -77,6 +82,7 @@ function Navbar({ currentUser }: { currentUser: User | null }) {
                             {currentUser?.avatar_url ? (<img src={currentUser.avatar_url} alt="avatar" className='avatar' />) : (<FiUser size={20} />)}
                             <span>{currentUser?.username}</span>
                         </div>
+                        <button className="logout-btn" onClick={handleLogout} title="Logout"><FiLogOut size={20} /></button>
                     </div>
                 </div>
             </nav>
