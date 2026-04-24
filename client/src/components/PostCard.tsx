@@ -102,7 +102,12 @@ function PostCard({ post }: Props) {
                     </div>
                     <div className="post-clickable-area" onClick={handlePostClick} style={{ cursor: "pointer" }}>
                         <h3 className="post-title">{post.title}</h3>
-                        <p className="post-body">{post.body}</p>
+                        {post.body && <p className="post-body">{post.body}</p>}
+                        {post.image_url && (
+                            <div className="post-image-container">
+                                <img src={post.image_url} alt="post content" className="post-image" />
+                            </div>
+                        )}
                     </div>
                     <div className="post-actions">
                         <div className="vote-box">
