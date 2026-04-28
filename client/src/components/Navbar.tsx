@@ -45,8 +45,8 @@ function Navbar({ currentUser }: { currentUser: User | null }) {
             <nav className="navbar">
                 <div className="nav-content">
                     <div className="logo" onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>
-                        <div className="logo-icon">SR</div>
-                        <div className="logo-text">Super Reddit</div>
+                        <div className="logo-icon">D</div>
+                        <div className="logo-text">Discuzz</div>
                     </div>
                     <div className="search-container">
                         <FiSearch className='search-icon' size={24} />
