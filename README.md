@@ -1,6 +1,6 @@
-# Super Reddit: Full-Stack Social Networking Platform
+# Discuzz: Full-Stack Social Networking Platform
 
-A comprehensive, Reddit-like social networking platform featuring communities, threaded discussions, real-time-like voting, and image support. This project was developed as a college DBMS assignment to demonstrate advanced database design, asynchronous backend processing, and modern frontend architecture.
+A social networking platform featuring communities, threaded discussions, real-time-like voting, and image support. This project was developed as a college DBMS assignment.
 
 ## Tech Stack
 
