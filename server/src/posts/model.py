@@ -1,5 +1,5 @@
 from sqlmodel import SQLModel, Field, Column
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, Text
 from src.core.types import BinaryUUID
 from datetime import datetime, timezone
 from uuid import UUID, uuid4
@@ -12,7 +12,7 @@ class Post(SQLModel, table=True):
     author_id: UUID = Field(sa_column=Column(BinaryUUID, ForeignKey("users.id")))
     community_id: UUID = Field(sa_column=Column(BinaryUUID, ForeignKey("communities.id")))
     title: str = Field(max_length=200)
-    body: Optional[str] = None
+    body: Optional[str] = Field(default=None, sa_column=Column(Text))
     url: Optional[str] = None
     image_url: Optional[str] = None
     votes_score: int = Field(default=0)

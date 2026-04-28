@@ -14,7 +14,7 @@ async def lifespan(app: FastAPI):
     await init_db()
     yield
 
-app = FastAPI(title="social media app", lifespan=lifespan)
+app = FastAPI(title="discuzz", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
