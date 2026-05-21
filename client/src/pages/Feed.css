@@ -405,6 +405,7 @@
 
 .subreddit {
     font-weight: 600;
+    margin-right: 10px;
     color: #333;
 }
 
@@ -771,9 +772,6 @@ select option {
 }
 
 .join-btn {
-    position: absolute;
-    right: 16px;
-    bottom: 16px;
     padding: 8px 18px;
     border-radius: 999px;
     border: none;
