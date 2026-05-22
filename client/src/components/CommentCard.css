@@ -60,6 +60,7 @@
 
 .comment-content-area {
     flex-grow: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     padding-bottom: 8px;
@@ -97,6 +98,7 @@
 .comment-actions {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 4px;
     margin-bottom: 4px;
 }
@@ -169,6 +171,7 @@
     display: flex;
     flex-direction: column;
     margin-left: 11px;
+    min-width: 0;
 }
 
 .comment-replies-list {
@@ -179,6 +182,7 @@
 .reply-wrapper {
     position: relative;
     margin-left: 24px;
+    min-width: 0;
 }
 
 .curved-elbow {
@@ -280,4 +284,51 @@
 
 .reply-actions .cancel-btn:hover {
     background: rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 560px) {
+    .comment-side {
+        width: 20px;
+        min-width: 20px;
+        margin-right: 6px;
+    }
+
+    .comment-avatar,
+    .comment-avatar-fallback {
+        width: 20px;
+        height: 20px;
+        font-size: 10px;
+    }
+
+    .comment-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    .comment-text {
+        font-size: 13px;
+        line-height: 20px;
+    }
+
+    .comment-replies-container {
+        margin-left: 6px;
+    }
+
+    .reply-wrapper {
+        margin-left: 16px;
+    }
+
+    .curved-elbow {
+        left: -16px;
+        width: 16px;
+    }
+
+    .reply-wrapper::before {
+        left: -16px;
+    }
+
+    .collapsed-replies-indicator {
+        margin-left: 16px;
+    }
 }

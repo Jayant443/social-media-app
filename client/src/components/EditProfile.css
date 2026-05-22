@@ -7,6 +7,7 @@
     align-items: center;
     justify-content: center;
     z-index: 1000;
+    padding: 16px;
 }
 
 .modal-content {
@@ -115,4 +116,35 @@
 
 .avatar-upload-btn:hover {
     background: #f3f5f9;
+}
+
+@media (max-width: 560px) {
+    .modal-overlay {
+        align-items: flex-end;
+        padding: 10px;
+    }
+
+    .modal-content {
+        max-width: none;
+        max-height: calc(100vh - 20px);
+        overflow-y: auto;
+        border-radius: 16px 16px 12px 12px;
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        padding-left: 14px;
+        padding-right: 14px;
+    }
+
+    .avatar-edit-area {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .avatar-upload-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }

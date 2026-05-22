@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
 import type { Community, CommunityResponse } from "../types/community";
 import type { Post, PostResponse } from "../types/post";
+import type { User } from "../types/user";
 import { formatDate } from "../utils/formatDate";
 import { getCommunityByName, getCommunityMemberCount, getCommunityMembers, getCommunityPostCount, getCommunityPosts, getUserById, joinCommunity, leaveCommunity } from "../api/apiClient";
 import PostCard from "../components/PostCard";
@@ -16,6 +17,7 @@ function CommunityPage() {
     const [community, setCommunity] = useState<CommunityResponse | null>(null);
     const [communityDetails, setCommunityDetails] = useState<Community | null>(null);
     const [communityPosts, setCommunityPosts] = useState<Post[]>([]);
+    const [creator, setCreator] = useState<User | null>(null);
     const [isMember, setIsMember] = useState<boolean>(false);
     const [joinLoading, setJoinLoading] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(true);
@@ -42,6 +44,7 @@ function CommunityPage() {
     useEffect(() => {
         let isActive = true;
         if (!community?.id) return;
+        setCreator(null);
 
         async function getFullCommunityData(id: string) {
             try {
@@ -59,6 +62,16 @@ function CommunityPage() {
             } catch (err) {
                 console.error(err);
                 if (isActive) setCommunityDetails(null);
+            }
+        }
+
+        async function fetchCreator(userId: string) {
+            try {
+                const creatorData = await getUserById(userId);
+                if (isActive) setCreator(creatorData);
+            } catch (err) {
+                console.error("Failed to fetch community creator", err);
+                if (isActive) setCreator(null);
             }
         }
 
@@ -92,6 +105,7 @@ function CommunityPage() {
             }
         }
         getFullCommunityData(community.id);
+        fetchCreator(community.created_by);
         fetchCommunityPosts(community.id);
         if (currentUser) checkMembership(community.id);
 
@@ -133,8 +147,24 @@ function CommunityPage() {
             <div className="community-header card">
                 <div className="community-banner" style={{ backgroundImage: `url(${community?.banner_url})` }}></div>
                 <div className="community-info">
-                    <div className="community-avatar" style={{ backgroundImage: `url(${community?.icon_url})` }}>{!community?.icon_url && `r/`}</div>
-                    <div><h2>r/{community?.name}</h2></div>
+                    <div className="community-avatar" style={{ backgroundImage: `url(${community?.icon_url})` }}>{!community?.icon_url && `${community.name.charAt(0).toUpperCase()}`}</div>
+                    <div>
+                        <h2>r/{community?.name}</h2>
+                        {creator && (
+                            <Link to={`/user/${creator.username}`} className="community-creator">Created by
+                                {creator.avatar_url ? (
+                                    <img src={creator.avatar_url} alt={`${creator.username} avatar`} className="community-creator-avatar" />
+                                ) : (
+                                    <span className="community-creator-avatar community-creator-avatar-fallback">
+                                        {creator.username.charAt(0).toUpperCase()}
+                                    </span>
+                                )}
+                                <span>
+                                    <strong>u/{creator.username}</strong>
+                                </span>
+                            </Link>
+                        )}
+                    </div>
                 </div>
                 <div className="community-actions">{isOwner ? (
                     <>

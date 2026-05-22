@@ -1,6 +1,7 @@
 .create-post-form {
-    width: 70%;
+    width: min(100%, 760px);
     padding: 20px;
+    min-width: 0;
 }
 
 .create-post-form h2 {
@@ -90,3 +91,38 @@
     cursor: pointer;
 }
 
+.image-upload-box img {
+    max-width: 100%;
+    height: auto;
+}
+
+@media (max-width: 900px) {
+    .create-post-form {
+        width: 100%;
+    }
+}
+
+@media (max-width: 560px) {
+    .create-post-form {
+        padding: 14px;
+    }
+
+    .post-tabs {
+        border-radius: 14px;
+    }
+
+    .tab {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 12px;
+        padding: 8px 4px;
+    }
+
+    .image-upload-box {
+        padding: 22px 12px;
+    }
+
+    .image-upload-box img {
+        width: 100% !important;
+    }
+}

@@ -31,6 +31,7 @@ function Layout() {
     const [communities, setCommunities] = useState<CommunityResponse[]>([]);
     const [joinedCommunityIds, setJoinedCommunityIds] = useState<Set<string>>(new Set());
     const [savedPostIds, setSavedPostIds] = useState<Set<string>>(new Set());
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         async function fetchData() {
@@ -57,10 +58,11 @@ function Layout() {
 
     return (
         <div className="container">
-            <Navbar currentUser={currentUser} />
+            <Navbar currentUser={currentUser} onOpenSidebar={() => setSidebarOpen(true)} />
             <main className="main-layout">
+                <SideBar communities={communities} joinedCommunityIds={joinedCommunityIds} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
                 <Outlet context={ctx} />
-                <SideBar communities={communities} joinedCommunityIds={joinedCommunityIds} />
+                <div className={`sidebar-overlay ${sidebarOpen ? "active" : ""}`} onClick={() => setSidebarOpen(false)}></div>
             </main>
         </div>
     );
@@ -75,7 +77,7 @@ function App() {
                 <Route element={<ProtectedRoute />}>
                     <Route element={<Layout />}>
                         <Route path='/' element={<Feed />} />
-                        <Route path='/submit' element={<CreatePost />} />
+                        <Route path='/write' element={<CreatePost />} />
                         <Route path='/r/create' element={<CreateCommunity />} />
                         <Route path='/r/:communityName' element={<CommunityPage />} />
                         <Route path='/r/:communityName/comments/:postId' element={<PostPage />} />

@@ -85,14 +85,14 @@ function PostCard({ post }: Props) {
                         )}
                     </div>
                     <div className="post-meta">
-                        <Link to={`/r/${post.community_name}`} className="subreddit clickable" style={{ textDecoration: 'none', color: '#333' }}>r/{post.community_name}</Link>
-                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <Link to={`/r/${post.community_name}`} className="subreddit clickable">r/{post.community_name}</Link>
+                        <span className="author-data">
                             Posted by
-                            <Link to={`/user/${post.author_username}`} className="clickable" style={{ display: 'flex', alignItems: 'center', gap: '4px', textDecoration: 'none', color: '#888' }}>
+                            <Link className="link" to={`/user/${post.author_username}`}>
                                 {post.author_avatar_url ? (
-                                    <img src={post.author_avatar_url} alt="avatar" style={{ width: '16px', height: '16px', borderRadius: '50%', objectFit: 'cover' }} />
+                                    <img src={post.author_avatar_url} alt="avatar"/>
                                 ) : (
-                                    <div style={{ width: '16px', height: '16px', borderRadius: '50%', background: '#ff5100', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '10px', fontWeight: 'bold' }}>
+                                    <div className="username">
                                         {post.author_username?.charAt(0)?.toUpperCase()}
                                     </div>
                                 )}

@@ -1,8 +1,12 @@
 .sidebar {
-    width: 25%;
+    width: min(320px, 28%);
     flex-shrink: 0;
     position: sticky;
     top: 1px;
+}
+
+.sidebar-mobile-header {
+    display: none;
 }
 
 .side-card h3 {
@@ -44,6 +48,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
     padding: 10px 12px;
     border-radius: 10px;
     transition: all 0.2s ease;
@@ -71,6 +76,7 @@
     border: 1px solid #cecece;
     cursor: pointer;
     transition: all 0.2s ease;
+    flex-shrink: 0;
 }
 
 .community-btn button:hover {
@@ -92,4 +98,59 @@
 
 .save-btn:hover {
     background: #f3f5f9;
+}
+
+@media (max-width: 900px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        z-index: 90;
+        width: min(360px, 70vw);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 14px;
+        background: #f6f8fb;
+        box-shadow: 12px 0 30px rgba(0, 0, 0, 0.16);
+        transform: translateX(-105%);
+        transition: transform 0.22s ease;
+        overflow-y: auto;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar>* {
+        margin-bottom: 0;
+    }
+
+    .sidebar-mobile-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 4px 2px 2px;
+    }
+
+    .sidebar-mobile-header h2 {
+        font-size: 18px;
+        color: #222;
+    }
+}
+
+@media (max-width: 640px) {
+    .sidebar {
+        gap: 12px;
+    }
+
+    .side-card h3 {
+        margin-bottom: 14px;
+    }
+
+    .community-btn {
+        padding: 10px 0;
+    }
 }
