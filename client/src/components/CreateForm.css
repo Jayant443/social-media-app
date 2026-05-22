@@ -1,5 +1,5 @@
 .create-post-form {
-    width: min(100%, 760px);
+    flex: 1;
     padding: 20px;
     min-width: 0;
 }

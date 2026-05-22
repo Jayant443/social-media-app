@@ -40,7 +40,7 @@ function SideBar({ communities, joinedCommunityIds, isOpen = false, onClose }: S
                     <h3>Home</h3>
                     <p>Your personal Super Reddit frontpage. Come here to check in with your favorite communities.</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                        <button className="create-post-btn" onClick={() => { navigate('/submit'); onClose?.(); }}>Create Post</button>
+                        <button className="create-post-btn" onClick={() => { navigate('/write'); onClose?.(); }}>Create Post</button>
                         <button className="create-post-btn" onClick={() => { navigate('/r/create'); onClose?.(); }}>Create Community</button>
                         <button className="save-btn" style={{ width: '100%', height: '40px' }} onClick={() => { navigate('/saved'); onClose?.(); }}>Saved Posts</button>
                     </div>
