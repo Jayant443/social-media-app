@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { FiFileText, FiImage, FiLink, FiUpload } from "react-icons/fi";
 import type { Community } from "../types/community";
 import { createPost, getUserJoinedCommunities } from "../api/apiClient";
+import FormActions from "./UI/FormActions";
+import './CreateForm.css';
+import './UI/FormGroup.css';
 
 function CreatePostForm() {
     const navigate = useNavigate();
@@ -83,10 +86,7 @@ function CreatePostForm() {
                         <input type="text" value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://example.com" />
                     </div>
                 )}
-                <div className="form-actions">
-                    <button className="post-btn" onClick={handleSubmit}>Post</button>
-                    <button className="cancel-btn" onClick={() => navigate('/')}>Cancel</button>
-                </div>
+                <FormActions handleSubmit={handleSubmit} formType="create-post"/>
             </div>
         </>
     );

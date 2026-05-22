@@ -1,0 +1,60 @@
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    color: #444;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #f9fafc;
+    font-size: 14px;
+    outline: none;
+    transition: 0.2s;
+}
+
+.form-group select {
+    padding: 10px 40px 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    background: #f9fafc;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.form-group select:hover {
+    background-color: #f1f3f7;
+}
+
+.form-group select:focus {
+    border-color: #ff5100;
+    background-color: #fff;
+}
+
+select option {
+    padding: 10px;
+    background: #fff;
+    color: #333;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    background: #fff;
+    border-color: #ff5100;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: none;
+}

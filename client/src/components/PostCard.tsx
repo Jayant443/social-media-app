@@ -7,6 +7,7 @@ import { useVote } from "../hooks/useVote";
 import { useNavigate } from "react-router-dom";
 import { savePost, unsavePost, deletePost } from "../api/apiClient";
 import type { LayoutContext } from "../App";
+import './PostCard.css';
 
 type Props = {
     post: Post;

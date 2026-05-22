@@ -1,0 +1,18 @@
+.post-page {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    max-width: 900px;
+}
+
+.comments-section {
+    padding: 24px;
+}
+
+.comments-section h3 {
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+    color: #1a1a1b;
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import type { CommunityResponse } from "../types/community";
 import { joinCommunity } from "../api/apiClient";
+import './Sidebar.css';
 
 function SideBar({ communities, joinedCommunityIds }: { communities: CommunityResponse[], joinedCommunityIds: Set<string> }) {
     const [joinedIds, setJoinedIds] = useState<Set<string>>(joinedCommunityIds);
@@ -33,7 +34,7 @@ function SideBar({ communities, joinedCommunityIds }: { communities: CommunityRe
                     <p>Your personal Super Reddit frontpage. Come here to check in with your favorite communities.</p>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         <button className="create-post-btn" onClick={() => navigate('/submit')}>Create Post</button>
-                        <button className="cancel-btn" style={{ width: '100%', height: '40px' }} onClick={() => navigate('/saved')}>Saved Posts</button>
+                        <button className="save-btn" style={{ width: '100%', height: '40px' }} onClick={() => navigate('/saved')}>Saved Posts</button>
                     </div>
                 </div>
                 <div className="side-card card">

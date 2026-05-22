@@ -1,0 +1,38 @@
+.welcome-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 24px;
+}
+
+.auth-logo {
+    background-color: #ff4500;
+    color: white;
+    font-weight: bold;
+    font-size: 24px;
+    width: 54px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.app-title {
+    display: flex;
+    flex-direction: column;
+}
+
+#app-name {
+    font-size: 32px;
+    font-weight: 800;
+    color: #1a1a1b;
+    line-height: 1.2;
+}
+
+#tagline {
+    font-size: 14px;
+    color: #7c7c7c;
+    margin-top: 2px;
+}

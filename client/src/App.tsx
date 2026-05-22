@@ -16,7 +16,6 @@ import { getRandomCommunities, getUser, getUserJoinedCommunities, getSavedPostId
 import type { User } from './types/user';
 import type { CommunityResponse } from './types/community';
 import { formatDate } from './utils/formatDate';
-import './pages/Feed.css';
 import ProtectedRoute from './ProtectedRoute';
 
 export interface LayoutContext {

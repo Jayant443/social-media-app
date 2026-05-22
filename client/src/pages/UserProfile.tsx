@@ -9,6 +9,7 @@ import { formatDate } from "../utils/formatDate";
 import PostCard from "../components/PostCard";
 import EditProfile from "../components/EditProfile";
 import type { LayoutContext } from "../App";
+import "./UserProfile.css";
 
 function UserProfile() {
     const { username } = useParams<{ username: string }>();

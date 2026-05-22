@@ -6,6 +6,7 @@ import { getCommentReplies, postReply, deleteComment } from "../api/apiClient";
 import { formatDate } from "../utils/formatDate";
 import type { LayoutContext } from "../App";
 import { useState, useEffect } from "react";
+import './CommentCard.css';
 
 type Props = {
     comment: Comment;

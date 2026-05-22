@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PostCard from "../components/PostCard";
 import type { Post } from "../types/post";
 import { getSavedPosts } from "../api/apiClient";
+import "./Feed.css";
 
 function SavedPosts() {
     const [posts, setPosts] = useState<Post[]>([]);

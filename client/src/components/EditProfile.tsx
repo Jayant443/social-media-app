@@ -2,6 +2,9 @@ import { useState } from "react";
 import { FiUpload, FiX } from "react-icons/fi";
 import type { User } from "../types/user";
 import { updateUser } from "../api/apiClient";
+import './EditProfile.css';
+import './UI/FormGroup.css';
+import './UI/FormActions.css';
 
 type Props = {
     user: User;

@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FiUpload } from "react-icons/fi";
 import { createCommunity } from "../api/apiClient";
+import FormActions from "./UI/FormActions";
+import './CreateForm.css';
+import './UI/FormGroup.css';
 
 function CreateCommunityForm() {
     const navigate = useNavigate();
@@ -66,10 +69,7 @@ function CreateCommunityForm() {
                         {bannerPreview && <img src={bannerPreview} style={{ width: "50%", borderRadius: "10px" }} />}
                     </div>
                 </div>
-                <div className="form-actions">
-                    <button className="post-btn" onClick={handleCreate}>Create</button>
-                    <button className="cancel-btn" onClick={() => navigate('/')}>Cancel</button>
-                </div>
+                <FormActions handleSubmit={handleCreate} formType="create-community" />
             </div>
         </>
     );

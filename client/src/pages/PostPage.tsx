@@ -6,6 +6,8 @@ import type { Post } from "../types/post";
 import type { Comment } from "../types/comment";
 import { getPostById, getTopComments, postComment, getCommunityById } from "../api/apiClient";
 import { formatDate } from "../utils/formatDate";
+import "../components/UI/FormActions.css";
+import "./PostPage.css";
 
 function PostPage() {
     const { communityName, postId } = useParams<{ communityName?: string, postId: string }>();

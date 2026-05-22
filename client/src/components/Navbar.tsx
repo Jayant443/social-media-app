@@ -5,6 +5,7 @@ import type { User } from '../types/user';
 import { search } from '../api/apiClient';
 import type { Community } from '../types/community';
 import type { Post } from '../types/post';
+import "./Navbar.css";
 
 function Navbar({ currentUser }: { currentUser: User | null }) {
     const [open, setOpen] = useState(false);

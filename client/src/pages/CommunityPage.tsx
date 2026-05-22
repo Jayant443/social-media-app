@@ -7,6 +7,7 @@ import { formatDate } from "../utils/formatDate";
 import { getCommunityByName, getCommunityMemberCount, getCommunityMembers, getCommunityPostCount, getCommunityPosts, getUserById, joinCommunity, leaveCommunity } from "../api/apiClient";
 import PostCard from "../components/PostCard";
 import type { LayoutContext } from "../App";
+import "./CommunityPage.css";
 
 function CommunityPage() {
     const { communityName } = useParams<{ communityName: string }>();
