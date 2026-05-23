@@ -4,7 +4,7 @@ class Settings(BaseSettings):
     DB_URL: str
     JWT_SECRET: str
     JWT_ALGORITHM: str
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 3600
     CLOUDINARY_API_KEY: str
     CLOUDINARY_API_SECRET: str
     CLOUDINARY_CLOUD_NAME: str
