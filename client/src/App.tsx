@@ -61,8 +61,10 @@ function Layout() {
             <Navbar currentUser={currentUser} onOpenSidebar={() => setSidebarOpen(true)} />
             <main className="main-layout">
                 <SideBar communities={communities} joinedCommunityIds={joinedCommunityIds} isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-                <Outlet context={ctx} />
-                <div className={`sidebar-overlay ${sidebarOpen ? "active" : ""}`} onClick={() => setSidebarOpen(false)}></div>
+                <div className="content">
+                    <Outlet context={ctx} />
+                    <div className={`sidebar-overlay ${sidebarOpen ? "active" : ""}`} onClick={() => setSidebarOpen(false)}></div>
+                </div>
             </main>
         </div>
     );

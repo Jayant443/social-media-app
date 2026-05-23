@@ -3,6 +3,8 @@
     background-color: #ffffff;
     border-bottom: 1px solid #c9c9c9;
     flex-shrink: 0;
+    position: fixed;
+    z-index: 10;
 }
 
 .nav-content {
@@ -155,27 +157,6 @@
     background-color: #ececec;
 }
 
-.logout-btn {
-    background-color: #f3f5f9;
-    border: none;
-    width: 40px;
-    height: 40px;
-    padding: 10px;
-    margin-right: 10px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    color: #e03131;
-}
-
-.logout-btn:hover {
-    background-color: #ffe3e3;
-    color: #c92a2a;
-}
-
 .mobile-search-btn,
 .mobile-sidebar-btn {
     display: none;
@@ -214,10 +195,11 @@
 .user-profile {
     display: flex;
     align-items: center;
+    justify-content: center;
     max-width: 180px;
-    gap: 10px;
+    width: 40px;
+    height: 40px;
     background-color: #f3f5f9;
-    padding: 6px 12px;
     border-radius: 999px;
     cursor: pointer;
     transition: all 0.2s ease;
@@ -227,29 +209,15 @@
     background-color: #e7ebf3;
 }
 
-.user-profile span:first-child {
-    display: flex;
-    align-items: center;
-}
-
-.user-profile span:last-child {
-    font-size: 14px;
-    font-weight: 500;
-    color: #333;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .avatar {
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
+    height: 40px;
+    width: 40px;
     background-color: #e7ebf3;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .avatar img {
@@ -257,6 +225,26 @@
     height: 100%;
     object-fit: cover;
 }
+
+.logout-btn {
+    background-color: #f3f5f9;
+    border: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    color: #e03131;
+}
+
+.logout-btn:hover {
+    background-color: #ffe3e3;
+    color: #c92a2a;
+}
+
 
 @media (max-width: 900px) {
     .nav-content {
@@ -325,8 +313,8 @@
     }
 
     .avatar {
-        width: 28px;
-        height: 28px;
+        width: 36px;
+        height: 36px;
     }
 
     .search-container input {

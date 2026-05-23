@@ -1,8 +1,9 @@
 .sidebar {
     width: min(320px, 28%);
     flex-shrink: 0;
-    position: sticky;
-    top: 1px;
+    position: fixed;
+    z-index: 1000;
+    top: 90px;
 }
 
 .sidebar-mobile-header {

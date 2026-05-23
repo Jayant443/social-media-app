@@ -65,8 +65,7 @@ function Navbar({ currentUser, onOpenSidebar }: NavbarProps) {
                             )}
                         </div>
                         <div className="user-profile" onClick={() => currentUser && navigate(`/user/${currentUser.username}`)}>
-                            {currentUser?.avatar_url ? (<img src={currentUser.avatar_url} alt="avatar" className='avatar' />) : (<FiUser size={20} />)}
-                            <span>{currentUser?.username}</span>
+                            {currentUser?.avatar_url ? (<img src={currentUser.avatar_url} alt="avatar" className='avatar' />) : (<FiUser size={25} />)}
                         </div>
                         <button className="logout-btn" onClick={handleLogout} title="Logout"><FiLogOut size={20} /></button>
                     </div>
