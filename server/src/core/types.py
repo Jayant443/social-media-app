@@ -1,9 +1,8 @@
-from sqlalchemy import TypeDecorator
-from sqlalchemy.dialects.mysql import BINARY
+from sqlalchemy import LargeBinary, TypeDecorator
 from uuid import UUID
 
 class BinaryUUID(TypeDecorator):
-    impl = BINARY(16)
+    impl = LargeBinary(16)
     cache_ok = True
 
     def process_bind_param(self, value, dialect):
