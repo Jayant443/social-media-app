@@ -170,13 +170,15 @@ export const postReply = async (postId: string, commentId: string, reply: string
     return res.data;
 }
 
-export const savePost = async (postId: string): Promise<any> => {
+export const savePost = async (postId: string): Promise<unknown> => {
     const res = await axios.post(`${postRoute}/save`, { post_id: postId }, getConfig());
+    console.log(res.data);
     return res.data;
 }
 
-export const unsavePost = async (postId: string): Promise<any> => {
+export const unsavePost = async (postId: string): Promise<unknown> => {
     const res = await axios.delete(`${postRoute}/unsave/${postId}`, getConfig());
+    console.log(res.data);
     return res.data;
 }
 
