@@ -20,8 +20,8 @@ class Post(SQLModel, table=True):
     is_deleted: bool = Field(default=False)
     is_locked: bool = Field(default=False)
     is_pinned: bool = Field(default=False)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
-    updated_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now())
+    updated_at: datetime = Field(default_factory=lambda: datetime.now())
 
 
 class SavedPost(SQLModel, table=True):
@@ -30,4 +30,4 @@ class SavedPost(SQLModel, table=True):
     id: UUID = Field(sa_column=Column(BinaryUUID, primary_key=True, default=uuid4))
     user_id: UUID = Field(sa_column=Column(BinaryUUID, ForeignKey("users.id")))
     post_id: UUID = Field(sa_column=Column(BinaryUUID, ForeignKey("posts.id")))
-    saved_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    saved_at: datetime = Field(default_factory=lambda: datetime.now())

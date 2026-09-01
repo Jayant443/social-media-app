@@ -18,4 +18,4 @@ class Vote(SQLModel, table=True):
     target_id: UUID = Field(sa_column=Column(BinaryUUID, nullable=False))
     target_type: TargetType
     value: int = Field(ge=-1, le=1)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now())

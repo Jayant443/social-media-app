@@ -22,7 +22,7 @@ class Community(SQLModel, table=True):
     created_by: UUID = Field(sa_column=Column(BinaryUUID, ForeignKey("users.id")))
     is_private: bool = Field(default=False)
     is_restricted: bool = Field(default=False)
-    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    created_at: datetime = Field(default_factory=lambda: datetime.now())
 
 class CommunityMember(SQLModel, table=True):
     __tablename__ = "community_members"
@@ -31,4 +31,4 @@ class CommunityMember(SQLModel, table=True):
     user_id: UUID = Field(sa_column=Column(BinaryUUID, ForeignKey("users.id")))
     community_id: UUID = Field(sa_column=Column(BinaryUUID, ForeignKey("communities.id")))
     role: Role
-    joined_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    joined_at: datetime = Field(default_factory=lambda: datetime.now())
