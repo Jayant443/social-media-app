@@ -14,6 +14,7 @@ from src.comments.routes import comment_router
 from src.votes.routes import vote_router
 from src.communities.routes import community_router
 from src.auth.routes import auth_router
+import os
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -24,7 +25,7 @@ app = FastAPI(title="discuzz", lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://127.0.0.1:8000", "http://localhost:3000"],
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173", "http://127.0.0.1:8000", "http://localhost:3000", os.getenv("FRONTEND_URL", "*")],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
